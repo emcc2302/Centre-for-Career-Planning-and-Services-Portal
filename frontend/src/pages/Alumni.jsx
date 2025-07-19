@@ -1,10 +1,8 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Sidebar from "../components/Sidebar";
-import useGetAlumni from "../api/useGetAlumni";
-import useGetAllAlumni from "../api/useGetAllAlumni";
-
-// see the dummy data after the code in case of rendering anything for help.
+import useGetAlumni from "../api/alumni/useGetAlumni";
+import useGetAllAlumni from "../api/alumni/useGetAllAlumni";
 
 const Alumni = () => {
   const [search, setSearch] = useState("");
@@ -23,6 +21,14 @@ const Alumni = () => {
     setAlumniList(data.length > 0 ? data : []);
   };
 
+  const labelMap = {
+    company: "Company Name",
+    jobRole: "Job Role",
+    jobId: "Job ID",
+    batch: "Batch (e.g., 2022)",
+    name: "Name",
+  };
+
   return (
     <div className="flex h-screen">
       <Sidebar />
@@ -32,29 +38,31 @@ const Alumni = () => {
             Welcome to the Alumni Portal 🎓
           </h1>
           <p className="text-center text-gray-600 mb-8">
-            Search for alumni by company, job role, or job ID
+            Search for alumni by company, job role, job ID, batch or name
           </p>
 
-          <div className="flex justify-center mb-8">
+          <div className="flex flex-col md:flex-row justify-center items-center gap-2 mb-8">
             <select
               value={searchType}
               onChange={(e) => setSearchType(e.target.value)}
-              className="px-4 py-2 border border-gray-300 bg-white rounded-l-md"
+              className="px-4 py-2 border border-gray-300 bg-white rounded-md"
             >
               <option value="company">Company</option>
               <option value="jobRole">Job Role</option>
               <option value="jobId">Job ID</option>
+              <option value="batch">Batch</option>
+              <option value="name">Name</option>
             </select>
             <input
               type="text"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              placeholder={`Enter ${searchType}`}
-              className="px-4 py-2 border border-gray-300 w-72"
+              placeholder={`Enter ${labelMap[searchType]}`}
+              className="px-4 py-2 border border-gray-300 rounded-md w-72"
             />
             <button
               onClick={handleSearch}
-              className="px-4 py-2 bg-indigo-600 text-white rounded-r-md hover:bg-indigo-700"
+              className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700"
             >
               Search
             </button>
@@ -70,18 +78,21 @@ const Alumni = () => {
                   className="bg-white p-6 rounded-xl shadow hover:shadow-md transition"
                 >
                   <h3 className="text-xl font-semibold text-indigo-600">{alum.name}</h3>
-                  <p>Email: {alum.Email}</p>
-                  <p>Mobile: {alum.MobileNumber}</p>
+                  <p>Email: {alum.Email || "N/A"}</p>
+                  <p>Mobile: {alum.MobileNumber || "N/A"}</p>
                   <p>Company: {alum.company || "N/A"}</p>
-                  <p>Institute ID: {alum.InstituteId}</p>
-                  <a
-                    href={alum.linkedin}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-blue-500 hover:underline"
-                  >
-                    LinkedIn Profile
-                  </a>
+                  <p>Batch: {alum.batch || "N/A"}</p>
+                  <p>Institute ID: {alum.InstituteId || "N/A"}</p>
+                  {alum.linkedin && (
+                    <a
+                      href={alum.linkedin}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-500 hover:underline"
+                    >
+                      LinkedIn Profile
+                    </a>
+                  )}
                 </div>
               ))}
             </div>
@@ -95,6 +106,7 @@ const Alumni = () => {
 };
 
 export default Alumni;
+
 
 
 // Dummy Data

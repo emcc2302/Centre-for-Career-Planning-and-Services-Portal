@@ -1,6 +1,7 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
-const BASE_URL = import.meta.env.VITE_BACKEND_URL+"/api/alumni" || 'http://localhost:3000/api/alumni';
+
+const BASE_URL = import.meta.env.VITE_BACKEND_URL + "/api/alumni" || 'http://localhost:3000/api/alumni';
 
 const useGetAlumniByType = () => {
   const [loading, setLoading] = useState(false);
@@ -23,6 +24,12 @@ const useGetAlumniByType = () => {
         break;
       case "company":
         url = `${BASE_URL}/search-by-company?company=${search}`;
+        break;
+      case "batch":
+        url = `${BASE_URL}/search-by-batch?batch=${search}`;
+        break;
+      case "name":
+        url = `${BASE_URL}/search-by-name?name=${search}`;
         break;
       default:
         toast.error("Invalid search type");
