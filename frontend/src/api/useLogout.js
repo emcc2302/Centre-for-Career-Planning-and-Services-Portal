@@ -11,6 +11,7 @@ const useLogout = () => {
    const logout = async()=>{
     setLoading(true);
     try{
+        console.log("i am logout api")
         const res = await fetch(`${backendUrl}/api/auth/logout`,{
             method: 'POST',
             headers: {

@@ -11,7 +11,6 @@ const useGetAllAlumni = () => {
     try {
       const res = await fetch(`${BASE_URL}`);
       const data = await res.json();
-
       if (!res.ok || data.message) {
         throw new Error(data.message || "Failed to fetch alumni");
       }

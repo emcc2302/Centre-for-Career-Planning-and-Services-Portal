@@ -25,6 +25,7 @@ import AdminJobList from './pages/admin/AdminJobList';
 import JobApplicants from './pages/admin/JobApplications';
 import Applications from './pages/Applications';
 import CreateJob from './pages/admin/CreateJob';
+import AddAlumni from './pages/admin/AddAlumni';
 
 function App() {
   const { authUser } = useAuthContext();
@@ -69,6 +70,11 @@ function App() {
         <Route
           path="/admin/create-job"
           element={authUser?.role === "admin" ? <CreateJob /> : <Navigate to="/" />}
+        />
+        {/* ALUMNI PAGES */}
+        <Route
+          path="/add-alumni"
+          element={authUser?.role ==='admin'? <AddAlumni/>:<Navigate to ='/'/>}
         />
       </Routes>
       
