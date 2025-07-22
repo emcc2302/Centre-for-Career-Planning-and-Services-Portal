@@ -1,8 +1,8 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
 import { useState } from 'react';
-import useLogin from '../api/useLogin.js';
-import { useAppContext } from '../context/AppContext.jsx';
+import { Link } from 'react-router-dom';
+import { useAppContext } from '../../context/AppContext.jsx';
+
+import useLogin from '../../api/auth/useLogin.js';
 
 const Login = () => {
     const [email, setEmail] = useState("");

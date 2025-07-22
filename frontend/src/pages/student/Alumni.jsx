@@ -1,8 +1,8 @@
-"use client";
-import React, { useEffect, useState } from "react";
-import Sidebar from "../components/Sidebar";
-import useGetAlumni from "../api/alumni/useGetAlumni";
-import useGetAllAlumni from "../api/alumni/useGetAllAlumni";
+import { useEffect, useState } from "react";
+
+import Sidebar from "../../components/Sidebar";
+import useGetAlumni from "../../api/alumni/useGetAlumni";
+import useGetAllAlumni from "../../api/alumni/useGetAllAlumni";
 
 const Alumni = () => {
   const [search, setSearch] = useState("");
@@ -106,79 +106,3 @@ const Alumni = () => {
 };
 
 export default Alumni;
-
-
-
-// Dummy Data
-// [
-//   {
-//     "name": "Alice Johnson",
-//     "company": "Google",
-//     "linkedin": "https://linkedin.com/in/alicejohnson",
-//     "InstituteId": "INST001",
-//     "MobileNumber": 9876543210,
-//     "Email": "alice.johnson@example.com",
-//     "jobs": [
-//       {
-//         "id": "J101",
-//         "role": "Frontend Developer"
-//       }
-//     ]
-//   },
-//   {
-//     "name": "Bob Smith",
-//     "company": "Microsoft",
-//     "linkedin": "https://linkedin.com/in/bobsmith",
-//     "InstituteId": "INST002",
-//     "MobileNumber": 9876543211,
-//     "Email": "bob.smith@example.com",
-//     "jobs": [
-//       {
-//         "id": "J102",
-//         "role": "Backend Developer"
-//       }
-//     ]
-//   },
-//   {
-//     "name": "Carol Williams",
-//     "company": "Amazon",
-//     "linkedin": "https://linkedin.com/in/carolwilliams",
-//     "InstituteId": "INST003",
-//     "MobileNumber": 9876543212,
-//     "Email": "carol.williams@example.com",
-//     "jobs": [
-//       {
-//         "id": "J103",
-//         "role": "Full Stack Developer"
-//       }
-//     ]
-//   },
-//   {
-//     "name": "David Lee",
-//     "company": "Google",
-//     "linkedin": "https://linkedin.com/in/davidlee",
-//     "InstituteId": "INST004",
-//     "MobileNumber": 9876543213,
-//     "Email": "david.lee@example.com",
-//     "jobs": [
-//       {
-//         "id": "J104",
-//         "role": "Data Analyst"
-//       }
-//     ]
-//   },
-//   {
-//     "name": "Emma Brown",
-//     "company": "Netflix",
-//     "linkedin": "https://linkedin.com/in/emmabrown",
-//     "InstituteId": "INST005",
-//     "MobileNumber": 9876543214,
-//     "Email": "emma.brown@example.com",
-//     "jobs": [
-//       {
-//         "id": "J105",
-//         "role": "Machine Learning Engineer"
-//       }
-//     ]
-//   }
-// ]

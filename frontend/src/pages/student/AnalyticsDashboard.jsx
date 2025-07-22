@@ -1,11 +1,12 @@
-import React, { useState, useEffect, useRef } from 'react';
-import Sidebar from '../components/Sidebar';
-import CollegeInsights from '../components/analytics/CollegeInsights';
-import AdminButtons from '../components/analytics/AdminButtons'
-import Cards from '../components/analytics/Cards';
-import useGetAnalytics from '../api/useGetAnalytics';
-import useUpdateAnalytics from '../api/useUpdateAnalytics';
-import { useAuthContext } from '../context/AuthContext';
+import { useState, useEffect, useRef } from 'react';
+import { useAuthContext } from '../../context/AuthContext';
+
+import Sidebar from '../../components/Sidebar';
+import Cards from '../../components/analytics/Cards';
+import useGetAnalytics from '../../api/analytics/useGetAnalytics';
+import AdminButtons from '../../components/analytics/AdminButtons'
+import useUpdateAnalytics from '../../api/analytics/useUpdateAnalytics';
+import CollegeInsights from '../../components/analytics/CollegeInsights';
 
 
 

@@ -1,8 +1,9 @@
 import { useEffect } from "react";
-import useThreadStore from "../api/useThreadStore";
-import Sidebar from "../components/Sidebar";
-import { useAppContext } from "../context/AppContext";
-import Thread from "../components/Thread";
+import { useAppContext } from "../../context/AppContext";
+
+import Thread from "../../components/DiscussionForum/Thread";
+import Sidebar from "../../components/Sidebar";
+import useThreadStore from "../../api/thread/useThreadStore";
 
 const DiscussionForum = () => {
   const { setShowAddThread } = useAppContext();

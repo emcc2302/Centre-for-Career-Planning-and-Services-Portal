@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
-import { fetchJobs, fetchMyApplications } from "../api/useApply";
 import { toast } from "react-hot-toast";
-import Sidebar from "../components/Sidebar";
-import ApplyModal from "../components/ApplyModel";
+import  { useEffect, useState } from "react";
+import { fetchJobs, fetchMyApplications } from "../../api/useApply";
+
+import Sidebar from "../../components/Sidebar";
+import ApplyModal from "../../components/ApplyModel";
 
 const Applications = () => {
   const [jobs, setJobs] = useState([]);

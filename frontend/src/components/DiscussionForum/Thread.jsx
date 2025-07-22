@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import useThreadStore from '../api/useThreadStore';
-import Comment from './Comment';
+import useThreadStore from '../../api/thread/useThreadStore';
+import Comment from '../Comment';
 
 const Thread = ({ thread }) => {
   const { createComment, loading } = useThreadStore();
@@ -52,7 +52,7 @@ const Thread = ({ thread }) => {
       </div>
 
       <div className='flex flex-col items-end mt-5'>
-        <p className="text-sm text-gray-500 font-medium">Author: {thread.author.name}</p>
+        <p className="text-sm text-gray-500 font-medium">Author: {thread.author.name }</p>
 
         <button
           className="mt-3 px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition"

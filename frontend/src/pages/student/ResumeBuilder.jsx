@@ -1,13 +1,14 @@
-import React, { useState } from 'react';
-import Sidebar from '../components/Sidebar';
-import { useResume } from '../api/useResume';
-import PersonalInfo from '../components/ResumeBuilder/PersonalInfo';
-import Education from '../components/ResumeBuilder/Education';
-import Experience from '../components/ResumeBuilder/Experience';
-import Skills from '../components/ResumeBuilder/Skills';
-import Project from '../components/ResumeBuilder/Project';
-import Certifications from '../components/ResumeBuilder/Certifications';
+import { useState } from 'react';
+import { useResume } from '../../api/resume/useResume';
+
 import toast from 'react-hot-toast';
+import Sidebar from '../../components/Sidebar';
+import Skills from '../../components/ResumeBuilder/Skills';
+import Project from '../../components/ResumeBuilder/Project';
+import Education from '../../components/ResumeBuilder/Education';
+import Experience from '../../components/ResumeBuilder/Experience';
+import PersonalInfo from '../../components/ResumeBuilder/PersonalInfo';
+import Certifications from '../../components/ResumeBuilder/Certifications';
 
 function ResumeBuilder() {
     const { generateResume, loading } = useResume();
@@ -78,28 +79,40 @@ function ResumeBuilder() {
     const isValidForm = () => {
         const { personalInfo, education, experience, skills } = formData;
 
+        // Check required personal info fields
         if (!personalInfo.name.trim() || !personalInfo.email.trim() || !personalInfo.phone.trim()) {
             toast.error("Please fill out all personal information.");
             return false;
         }
 
+        // Email format check
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(personalInfo.email)) {
             toast.error("Invalid email format.");
             return false;
         }
 
+        // Email domain check: only allow @iitbhilai.ac.in
+        const domainRegex = /^[a-zA-Z0-9._%+-]+@iitbhilai\.ac\.in$/;
+        if (!domainRegex.test(personalInfo.email)) {
+            toast.error("Email must be a valid IIT Bhilai email (e.g., name@iitbhilai.ac.in)");
+            return false;
+        }
+
+        // Phone format check
         const phoneRegex = /^\d{10}$/;
         if (!phoneRegex.test(personalInfo.phone)) {
             toast.error("Phone number should be 10 digits.");
             return false;
         }
 
+        // Skills validation
         if (skills.length === 0 || skills.some(skill => !skill.trim())) {
             toast.error("Please enter at least one skill.");
             return false;
         }
 
+        // Education entries validation
         for (let edu of education) {
             if (!edu.institution.trim() || !edu.degree.trim() || !edu.startDate.trim() || !edu.endDate.trim()) {
                 toast.error("All education entries must be fully filled out.");
@@ -107,14 +120,15 @@ function ResumeBuilder() {
             }
         }
 
+        // Experience entries validation
         for (let exp of experience) {
             if (!exp.company.trim() || !exp.position.trim() || !exp.startDate.trim() || !exp.endDate.trim()) {
                 toast.error("All experience entries must be fully filled out.");
                 return false;
             }
-    }
+        }
 
-    return true;
+        return true;
     };
 
     const handleSubmit = async (e) => {

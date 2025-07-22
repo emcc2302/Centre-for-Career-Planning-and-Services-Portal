@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import Sidebar from '../components/Sidebar';
 import { useAuthContext } from '../context/AuthContext';
-import { useReferrals } from '../api/useReferrals';
-import { useRequestReferral } from '../api/useRequestReferral';
-import { useDeleteReferral } from '../api/useDeleteReferral';
-import { useProvideReferral } from '../api/useProvideReferral';
+import { useReferrals } from '../api/referrals/useReferrals';
+import { useRequestReferral } from '../api/referrals/useRequestReferral';
+import { useDeleteReferral } from '../api/referrals/useDeleteReferral';
+import { useProvideReferral } from '../api/referrals/useProvideReferral';
 
 function Referrals() {
   const { authUser } = useAuthContext();

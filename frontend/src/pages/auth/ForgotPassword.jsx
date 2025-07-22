@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { useAppContext } from '../context/AppContext.jsx';
-import useForgotPassword from '../api/useForgotPassword.js';
+import { useAppContext } from '../../context/AppContext.jsx';
+import useForgotPassword from '../../api/auth/useForgotPassword.js';
 
 const ForgotPassword = () => {
 
