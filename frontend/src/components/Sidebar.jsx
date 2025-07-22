@@ -1,18 +1,18 @@
 import React, { useState } from 'react';
 import { NavLink, Outlet } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
-import LogoutButton from './LogoutButton.jsx';
+import LogoutButton from "../pages/auth/LogoutButton"
 import { useAuthContext } from '../context/AuthContext';
 
 const AllLinks = [
   { name: 'Home',           link: '/',            user: 'all'     },
-  { name: 'Profile',        link: '/profile',         user: 'all'     },
+  { name: 'Profile',        link: '/profile',         user: 'student'     },
   { name: 'Applications',   link: '/applications',    user: 'all'     },
   { name: 'Saved Apps',     link: '/saved-applications', user: 'all'   },
   { name: 'Analytics',      link: '/analytics',       user: 'all'     },
   { name: 'Referrals',      link: '/referrals',        user: 'all'     },
   { name: 'Resume Builder', link: '/resumebuilder',   user: 'all' },
-  { name: 'Discussion Forum', link: '/discussion-forum',   user: 'all' },
+  { name: 'Discussion Forum', link: '/discussion-forum',   user: 'student' },
   { name: 'alumni', link: '/alumni',   user: 'all' },
 ];
 

@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import useSignup from '../api/useSignup';
-import { useAppContext } from '../context/AppContext';
+import useSignup from '../../api/auth/useSignup';
+
+// import { useAppContext } from '../../context/AppContext';
 
 function Signup() {
   const [inputs, setInputs] = useState({

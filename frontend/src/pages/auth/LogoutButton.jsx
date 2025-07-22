@@ -1,5 +1,5 @@
 import React from 'react'
-import useLogout from '../api/useLogout';
+import useLogout from '../../api/auth/useLogout';
 
 const LogoutButton = () => {
   const {loading, logout} = useLogout()

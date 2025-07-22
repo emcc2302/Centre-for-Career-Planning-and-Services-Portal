@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react";
-import { useAuthContext } from "../context/AuthContext";
-import Sidebar from "../components/Sidebar";
+import { useAuthContext } from "../../context/AuthContext";
+
 import {
   getStudentProfile,
   updateStudentProfile,
   createStudentProfile,
-} from "../api/useProfile";
+} from "../../api/profile/useStudentProfile";
+
+import toast from "react-hot-toast";
+import Sidebar from "../../components/Sidebar";
 
 const initialData = {
   name: "",
@@ -46,22 +49,32 @@ export default function Profile() {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    const payload = { ...formData, batch: 2025, status: "active" };
-    try {
-      if (!profile.studentID) {
-        await createStudentProfile(authUser._id, payload);
-      } else {
-        await updateStudentProfile(authUser._id, payload);
-      }
-      const updated = await getStudentProfile(authUser._id);
-      setProfile({ ...initialData, ...updated });
-      setFormData({ ...initialData, ...updated });
-      setShowForm(false);
-    } catch (err) {
-      console.error(err);
+  e.preventDefault();
+  // TODO: same id no cannot be added so add toast for that. 
+  const payload = { ...formData, batch: 2025, status: "active" };
+  try {
+    if (!profile.studentID) {
+      await createStudentProfile(authUser._id, payload);
+      toast.success("Profile created successfully!");
+    } else {
+      await updateStudentProfile(authUser._id, payload);
+      toast.success("Profile updated successfully!");
     }
-  };
+
+    const updated = await getStudentProfile(authUser._id);
+    setProfile({ ...initialData, ...updated });
+    setFormData({ ...initialData, ...updated });
+    setShowForm(false);
+  } catch (err) {
+    if (err.response?.data?.message?.includes("already exists")) {
+      toast.error("A profile with this Student ID already exists.");
+    } else {
+      toast.error("An error occurred. Please try again.");
+    }
+    console.error(err);
+  }
+};
+
 
   if (loading) {
     return (

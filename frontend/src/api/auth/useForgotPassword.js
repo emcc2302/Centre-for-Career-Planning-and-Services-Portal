@@ -1,5 +1,5 @@
 import toast from 'react-hot-toast';
-import { useAppContext } from '../context/AppContext';
+import { useAppContext } from '../../context/AppContext';
 import { useState } from 'react';
 
 const useForgotPassword = () => {

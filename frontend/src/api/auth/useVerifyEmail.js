@@ -1,7 +1,7 @@
 import toast from 'react-hot-toast';
-import { useAppContext } from '../context/AppContext';
 import { useState } from 'react';
-import { useAuthContext } from '../context/AuthContext';
+import { useAppContext } from '../../context/AppContext';
+import { useAuthContext } from '../../context/AuthContext';
 
 const useVerifyEmail = () => {
     const [loading, setLoading] = useState(false);
@@ -53,6 +53,7 @@ const useVerifyEmail = () => {
                 body: JSON.stringify({ userId: tempUserId })
             })
             const data = await res.json();
+            console.log(data);
             if (!res.ok) throw new Error(data.message);
 
             toast.success("Verification email sent successfully!");

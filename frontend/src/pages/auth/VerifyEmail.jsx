@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react';
-import { useAppContext } from '../context/AppContext.jsx';
-import useVerifyEmail from '../api/useVerifyEmail.js';
+import { useAppContext } from '../../context/AppContext.jsx';
+
+// TODO: Verify email is not working check.
+
+import useVerifyEmail from '../../api/auth/useVerifyEmail.js';
 
 const VerifyEmail = () => {
 

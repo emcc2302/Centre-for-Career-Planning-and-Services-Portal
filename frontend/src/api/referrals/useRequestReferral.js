@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useAuthContext } from '../context/AuthContext';
+import { useAuthContext } from '../../context/AuthContext';
 const BASE_URL = import.meta.env.VITE_BACKEND_URL+"/api" || 'http://localhost:3000/api';
 
 export const useRequestReferral = () => {

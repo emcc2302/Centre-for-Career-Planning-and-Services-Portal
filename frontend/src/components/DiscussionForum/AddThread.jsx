@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { useAppContext } from '../context/AppContext';
-import useThreadStore from '../api/useThreadStore';
+import { useAppContext } from '../../context/AppContext';
+import useThreadStore from '../../api/thread/useThreadStore';
 import toast from 'react-hot-toast';
 
 const AddThread = () => {

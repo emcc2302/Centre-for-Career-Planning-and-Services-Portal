@@ -1,31 +1,38 @@
 import React from 'react';
 import './index.css';
 
-import Dashboard from './pages/Dashboard';
-import Login from './pages/Login';
-import Signup from './pages/Signup';
-import Home from './pages/Home';
-import AnalyticsDashboard from './pages/AnalyticsDashboard';
-import Referrals from './pages/Referrals';
-import ResumeBuilder from './pages/ResumeBuilder';
-import ResetPasswordPage from './pages/ResetPasswordPage';
-
-import {Routes, Route, Navigate } from 'react-router-dom';
-
-import { useAuthContext } from './context/AuthContext';
 import { Toaster } from 'react-hot-toast'
 import { useAppContext } from './context/AppContext';
-import ForgotPassword from './components/ForgotPassword';
-import VerifyEmail from './components/VerifyEmail';
-import DiscussionForum from './pages/DiscussionForum';
-import AddThread from './components/AddThread';
-import Profile from './pages/Profile';
-import Alumni from './pages/Alumni';
+import { useAuthContext } from './context/AuthContext';
+import {Routes, Route, Navigate } from 'react-router-dom';
+
+// Auth Pages Import
+import Login from './pages/auth/Login';
+import Signup from './pages/auth/Signup';
+import VerifyEmail from './pages/auth/VerifyEmail';
+import ForgotPassword from './pages/auth/ForgotPassword';
+import ResetPasswordPage from './pages/auth/ResetPasswordPage';
+
+// Student Pages Import
+import Alumni from './pages/student/Alumni';
+import Profile from './pages/student/Profile';
+import Applications from './pages/student/Applications';
+import ResumeBuilder from './pages/student/ResumeBuilder';
+import DiscussionForum from './pages/student/DiscussionForum';
+import AnalyticsDashboard from './pages/student/AnalyticsDashboard';
+
+import Home from './pages/Home';
+import Referrals from './pages/Referrals';
+import Dashboard from './pages/Dashboard';
+
+import AddThread from './components/DiscussionForum/AddThread';
+
+// Admin Pages Imports
+import AddAlumni from './pages/admin/Alumni';
+import CreateJob from './pages/admin/CreateJob';
 import AdminJobList from './pages/admin/AdminJobList';
 import JobApplicants from './pages/admin/JobApplications';
-import Applications from './pages/Applications';
-import CreateJob from './pages/admin/CreateJob';
-import AddAlumni from './pages/admin/AddAlumni';
+
 
 function App() {
   const { authUser } = useAuthContext();
@@ -39,6 +46,7 @@ function App() {
       
       
       <Routes>
+        
         <Route path='/' element={authUser ? <Home /> : <Navigate to='/login' />} />
         <Route path='/profile' element={authUser ? <Profile /> : <Navigate to='/login' />} />
         <Route path='/discussion-forum' element={authUser ? <DiscussionForum /> : <Navigate to='/login' />} />
@@ -74,7 +82,7 @@ function App() {
         {/* ALUMNI PAGES */}
         <Route
           path="/add-alumni"
-          element={authUser?.role ==='admin'? <AddAlumni/>:<Navigate to ='/'/>}
+          element={authUser?.role ==='admin'? <AddAlumni/> : <Navigate to ='/'/>}
         />
       </Routes>
       
