@@ -11,8 +11,12 @@ dotenv.config();
 export const signup = async (req, res) => {
     try {
         const { name, email, password, role } = req.body;
+
+        if (!email.endsWith('@iitbhilai.ac.in')) {
+            return res.status(400).json({ success: false, message: 'Only IIT Bhilai emails are allowed' });
+        }
+
         const user = await User.findOne({ email });
-        
         const verificationToken = Math.floor(100000 + (Math.random() * 900000)).toString();
 
         if (user) {
@@ -20,18 +24,17 @@ export const signup = async (req, res) => {
                 return res.status(400).json({ success: false, message: "User already exists" });
             }
             const salt = await bcrypt.genSalt(10);
-                const hashedPassword = await bcrypt.hash(password, salt);
+            const hashedPassword = await bcrypt.hash(password, salt);
 
-                user.name = name; 
-                user.password = hashedPassword;
-                user.verificationToken = verificationToken;
-                user.verificationTokenExpiresAt = Date.now() + 1 * 60 * 60 * 1000; 
+            user.name = name; 
+            user.password = hashedPassword;
+            user.verificationToken = verificationToken;
+            user.verificationTokenExpiresAt = Date.now() + 1 * 60 * 60 * 1000; 
 
-                await user.save();
+            await user.save();
+            await sendVerificationEmail(user.email, verificationToken);
 
-                await sendVerificationEmail(user.email, verificationToken);
-
-                return res.status(200).json({ success: true, userId: user._id });
+            return res.status(200).json({ success: true, userId: user._id });
         }
 
         const salt = await bcrypt.genSalt(10);
@@ -49,14 +52,8 @@ export const signup = async (req, res) => {
 
         const newUser = new User(userData);
         const savedUser = await newUser.save();
-
-        // await sendVerificationEmail(res, newUser.email, verificationToken);
         await sendVerificationEmail(newUser.email, verificationToken);
 
-        // generateTokenAndSetCookie(newUser._id, res);
-        // commented the above line because we need to verify the email first then set the cookie
-
-        // res.status(201).json({ message: "User created successfully" });
         res.status(200).json({ success: true, userId: savedUser._id });
 
     } catch (e) {
