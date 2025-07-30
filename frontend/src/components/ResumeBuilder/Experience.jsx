@@ -1,21 +1,24 @@
-import React from 'react'
+import React from 'react';
 
-function Experience({formData, handleArrayFieldChange, addItem, removeItem}) {
+function Experience({ formData, handleArrayFieldChange, addItem, removeItem }) {
     return (
-        <div className="bg-white p-6 rounded-lg shadow-md mb-6">
+        <div className="bg-white p-6 rounded-2xl shadow-md mb-6">
             <div className="flex justify-between items-center mb-4">
                 <h2 className="text-xl font-semibold text-slate-700">Experience</h2>
                 <button
                     type="button"
                     onClick={() => addItem('experience')}
-                    className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 text-sm"
+                    className="px-4 py-2 text-sm rounded-xl bg-blue-600 text-white hover:bg-blue-700 transition-colors"
                 >
-                    Add Experience
+                    + Add Experience
                 </button>
             </div>
 
             {formData.experience.map((exp, index) => (
-                <div key={index} className="mb-6 p-4 border border-slate-200 rounded bg-slate-50 relative">
+                <div
+                    key={index}
+                    className="mb-4 p-4 border border-slate-200 rounded-2xl bg-slate-50 relative"
+                >
                     {formData.experience.length > 1 && (
                         <button
                             type="button"
@@ -25,9 +28,12 @@ function Experience({formData, handleArrayFieldChange, addItem, removeItem}) {
                             ✕
                         </button>
                     )}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+
+                    <div className="space-y-4">
                         <div>
-                            <label className="block text-sm font-medium text-slate-600 mb-1">Company*</label>
+                            <label className="block text-sm font-medium text-slate-600 mb-1">
+                                Company<span className="text-red-500">*</span>
+                            </label>
                             <input
                                 type="text"
                                 name="company"
@@ -37,8 +43,11 @@ function Experience({formData, handleArrayFieldChange, addItem, removeItem}) {
                                 className="w-full p-2 border border-slate-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                             />
                         </div>
+
                         <div>
-                            <label className="block text-sm font-medium text-slate-600 mb-1">Position*</label>
+                            <label className="block text-sm font-medium text-slate-600 mb-1">
+                                Position<span className="text-red-500">*</span>
+                            </label>
                             <input
                                 type="text"
                                 name="position"
@@ -48,30 +57,40 @@ function Experience({formData, handleArrayFieldChange, addItem, removeItem}) {
                                 className="w-full p-2 border border-slate-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                             />
                         </div>
+
                         <div>
-                            <label className="block text-sm font-medium text-slate-600 mb-1">Location</label>
+                            <label className="block text-sm font-medium text-slate-600 mb-1">
+                                Location<span className="text-red-500">*</span>
+                            </label>
                             <input
                                 type="text"
                                 name="location"
                                 value={exp.location}
                                 onChange={(e) => handleArrayFieldChange('experience', index, e)}
+                                required
                                 className="w-full p-2 border border-slate-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                             />
                         </div>
-                        <div className="md:col-span-2">
-                            <label className="block text-sm font-medium text-slate-600 mb-1">Description*</label>
+
+                        <div>
+                            <label className="block text-sm font-medium text-slate-600 mb-1">
+                                Description<span className="text-red-500">*</span>
+                            </label>
                             <textarea
                                 name="description"
                                 value={exp.description}
                                 onChange={(e) => handleArrayFieldChange('experience', index, e)}
                                 required
                                 rows="3"
-                                className="w-full p-2 border border-slate-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 placeholder="Describe your responsibilities and achievements"
-                            ></textarea>
+                                className="w-full p-2 border border-slate-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            />
                         </div>
+
                         <div>
-                            <label className="block text-sm font-medium text-slate-600 mb-1">Start Date*</label>
+                            <label className="block text-sm font-medium text-slate-600 mb-1">
+                                Start Date<span className="text-red-500">*</span>
+                            </label>
                             <input
                                 type="date"
                                 name="startDate"
@@ -81,8 +100,11 @@ function Experience({formData, handleArrayFieldChange, addItem, removeItem}) {
                                 className="w-full p-2 border border-slate-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                             />
                         </div>
+
                         <div>
-                            <label className="block text-sm font-medium text-slate-600 mb-1">End Date (or Current)</label>
+                            <label className="block text-sm font-medium text-slate-600 mb-1">
+                                End Date (or Current)<span className="text-red-500">*</span>
+                            </label>
                             <input
                                 type="date"
                                 name="endDate"
@@ -95,7 +117,7 @@ function Experience({formData, handleArrayFieldChange, addItem, removeItem}) {
                 </div>
             ))}
         </div>
-    )
+    );
 }
 
-export default Experience
+export default Experience;

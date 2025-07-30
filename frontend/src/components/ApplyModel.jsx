@@ -23,9 +23,9 @@ const ApplyModal = ({ jobId, applicationLink, onClose, onApplied }) => {
     try {
       await applyToJob({
         jobId,
-        resume: formData.resume,
-        phone: formData.phone,
-        address: formData.address,
+        resume: formData.resume || "",
+        phone: formData.phone || "",
+        address: formData.address || "",
       });
       toast.success("Applied successfully");
       onApplied();   

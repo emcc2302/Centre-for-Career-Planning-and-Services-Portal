@@ -21,6 +21,15 @@ function ResumeBuilder() {
         certifications: [{ name: '', issuer: '', date: '' }]
     });
 
+    const requiredFields = {
+        personalInfo: ['name', 'email', 'phone', 'address', 'linkedin', 'github'],
+        education: ['institution', 'degree', 'field', 'startDate', 'endDate'],
+        experience: ['company', 'position', 'startDate', 'endDate', 'description'],
+        skills: ['*'],
+        projects: ['title', 'description'],
+        certifications: ['name', 'issuer', 'date']
+    };
+
     const handleArrayFieldChange = (category, index, e) => {
         const { name, value } = e.target;
         const updatedItems = [...formData[category]];
@@ -28,16 +37,11 @@ function ResumeBuilder() {
             ...updatedItems[index],
             [name]: value
         };
-
-        setFormData({
-            ...formData,
-            [category]: updatedItems
-        });
+        setFormData({ ...formData, [category]: updatedItems });
     };
 
     const addItem = (category) => {
         let newItem;
-
         switch (category) {
             case 'education':
                 newItem = { institution: '', degree: '', field: '', startDate: '', endDate: '', gpa: '' };
@@ -57,73 +61,73 @@ function ResumeBuilder() {
             default:
                 return;
         }
-
-        setFormData({
-            ...formData,
-            [category]: [...formData[category], newItem]
-        });
+        setFormData({ ...formData, [category]: [...formData[category], newItem] });
     };
 
     const removeItem = (category, index) => {
         if (formData[category].length <= 1) return;
-
         const updatedItems = [...formData[category]];
         updatedItems.splice(index, 1);
-
-        setFormData({
-            ...formData,
-            [category]: updatedItems
-        });
+        setFormData({ ...formData, [category]: updatedItems });
     };
 
     const isValidForm = () => {
-        const { personalInfo, education, experience, skills } = formData;
+        const { personalInfo, education, experience, skills, projects, certifications } = formData;
+        const required = (val) => val && val.trim() !== '';
 
-        // Check required personal info fields
-        if (!personalInfo.name.trim() || !personalInfo.email.trim() || !personalInfo.phone.trim()) {
-            toast.error("Please fill out all personal information.");
+        if (
+            !required(personalInfo.name) ||
+            !required(personalInfo.email) ||
+            !required(personalInfo.phone) ||
+            !required(personalInfo.address) ||
+            !required(personalInfo.linkedin) ||
+            !required(personalInfo.github)
+        ) {
+            toast.error('All personal info fields are required.');
             return false;
         }
 
-        // Email format check
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(personalInfo.email)) {
-            toast.error("Invalid email format.");
+            toast.error('Invalid email format.');
             return false;
         }
 
-        // Email domain check: only allow @iitbhilai.ac.in
-        const domainRegex = /^[a-zA-Z0-9._%+-]+@iitbhilai\.ac\.in$/;
-        if (!domainRegex.test(personalInfo.email)) {
-            toast.error("Email must be a valid IIT Bhilai email (e.g., name@iitbhilai.ac.in)");
-            return false;
-        }
-
-        // Phone format check
         const phoneRegex = /^\d{10}$/;
         if (!phoneRegex.test(personalInfo.phone)) {
-            toast.error("Phone number should be 10 digits.");
+            toast.error('Phone number should be 10 digits.');
             return false;
         }
 
-        // Skills validation
-        if (skills.length === 0 || skills.some(skill => !skill.trim())) {
-            toast.error("Please enter at least one skill.");
-            return false;
-        }
-
-        // Education entries validation
         for (let edu of education) {
-            if (!edu.institution.trim() || !edu.degree.trim() || !edu.startDate.trim() || !edu.endDate.trim()) {
-                toast.error("All education entries must be fully filled out.");
+            if (!required(edu.institution) || !required(edu.degree) || !required(edu.field) || !required(edu.startDate) || !required(edu.endDate)) {
+                toast.error('All education fields are required.');
                 return false;
             }
         }
 
-        // Experience entries validation
         for (let exp of experience) {
-            if (!exp.company.trim() || !exp.position.trim() || !exp.startDate.trim() || !exp.endDate.trim()) {
-                toast.error("All experience entries must be fully filled out.");
+            if (!required(exp.company) || !required(exp.position) || !required(exp.description) || !required(exp.startDate) || !required(exp.endDate)) {
+                toast.error('All experience fields are required.');
+                return false;
+            }
+        }
+
+        if (skills.length === 0 || skills.some(skill => !required(skill))) {
+            toast.error('Please enter at least one skill.');
+            return false;
+        }
+
+        for (let proj of projects) {
+            if (!required(proj.title) || !required(proj.description)) {
+                toast.error('All project fields are required.');
+                return false;
+            }
+        }
+
+        for (let cert of certifications) {
+            if (!required(cert.name) || !required(cert.issuer) || !required(cert.date)) {
+                toast.error('All certification fields are required.');
                 return false;
             }
         }
@@ -133,43 +137,45 @@ function ResumeBuilder() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!isValidForm()) {
-        toast.error("Please fill all required fields.");
-        return;
-    }
+        if (!isValidForm()) return;
         await generateResume(formData);
     };
 
     return (
-        <div className="flex h-screen bg-slate-100">
+        <div className="flex h-screen bg-slate-50">
             <Sidebar />
-            <div className="flex-1 p-6 overflow-auto">
-                <div className="flex justify-between items-center mb-6">
-                    <h1 className="text-2xl font-semibold text-slate-800">Resume Builder</h1>
-                    {/* <button
-                        type="button"
-                        onClick={handleSubmit}
-                        disabled={loading}
-                        className={`px-4 py-2 rounded font-medium ${loading ? 'bg-blue-300 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700 text-white'
-                            }`}
-                    >
-                        {loading ? 'Generating...' : 'Generate Resume'}
-                    </button> */}
+            <div className="flex-1 p-8 overflow-auto">
+                <div className="flex justify-between items-center mb-8">
+                    <h1 className="text-3xl font-bold text-[#0c4a42]">Resume Builder</h1>
                 </div>
 
-                <form onSubmit={handleSubmit}>
-                    <PersonalInfo formData={formData} setFormData={setFormData} />
-                    <Education formData={formData} handleArrayFieldChange={handleArrayFieldChange} addItem={addItem} removeItem={removeItem} />
-                    <Experience formData={formData} handleArrayFieldChange={handleArrayFieldChange} addItem={addItem} removeItem={removeItem} />
-                    <Skills formData={formData} setFormData={setFormData} addItem={addItem} removeItem={removeItem} />
-                    <Project formData={formData} handleArrayFieldChange={handleArrayFieldChange} addItem={addItem} removeItem={removeItem} />
-                    <Certifications formData={formData} handleArrayFieldChange={handleArrayFieldChange} addItem={addItem} removeItem={removeItem} />
-                    <div className="mt-6 flex justify-end">
+                <form onSubmit={handleSubmit} className="space-y-8">
+                    <div className="p-6 bg-white rounded-2xl shadow-md">
+                        <PersonalInfo formData={formData} setFormData={setFormData} requiredFields={requiredFields.personalInfo} />
+                    </div>
+                    <div className="p-6 bg-white rounded-2xl shadow-md">
+                        <Education formData={formData} handleArrayFieldChange={handleArrayFieldChange} addItem={addItem} removeItem={removeItem} requiredFields={requiredFields.education} />
+                    </div>
+                    <div className="p-6 bg-white rounded-2xl shadow-md">
+                        <Experience formData={formData} handleArrayFieldChange={handleArrayFieldChange} addItem={addItem} removeItem={removeItem} requiredFields={requiredFields.experience} />
+                    </div>
+                    <div className="p-6 bg-white rounded-2xl shadow-md">
+                        <Skills formData={formData} setFormData={setFormData} addItem={addItem} removeItem={removeItem} requiredFields={requiredFields.skills} />
+                    </div>
+                    <div className="p-6 bg-white rounded-2xl shadow-md">
+                        <Project formData={formData} handleArrayFieldChange={handleArrayFieldChange} addItem={addItem} removeItem={removeItem} requiredFields={requiredFields.projects} />
+                    </div>
+                    <div className="p-6 bg-white rounded-2xl shadow-md">
+                        <Certifications formData={formData} handleArrayFieldChange={handleArrayFieldChange} addItem={addItem} removeItem={removeItem} requiredFields={requiredFields.certifications} />
+                    </div>
+
+                    <div className="mt-8 flex justify-end">
                         <button
                             type="submit"
                             disabled={loading}
-                            className={`px-6 py-3 rounded-lg font-medium text-lg ${loading ? 'bg-blue-300 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700 text-white'
-                                }`}
+                            className={`px-6 py-3 rounded-xl font-semibold text-white text-lg transition-colors duration-200 ${
+                                loading ? 'bg-blue-300 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'
+                            }`}
                         >
                             {loading ? 'Generating Resume...' : 'Generate Resume PDF'}
                         </button>

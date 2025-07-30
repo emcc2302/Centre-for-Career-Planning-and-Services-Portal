@@ -1,7 +1,6 @@
 import { toast } from "react-hot-toast";
-import  { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { fetchJobs, fetchMyApplications } from "../../api/useApply";
-
 import Sidebar from "../../components/Sidebar";
 import ApplyModal from "../../components/ApplyModel";
 
@@ -9,9 +8,9 @@ const Applications = () => {
   const [jobs, setJobs] = useState([]);
   const [myApps, setMyApps] = useState([]);
   const [loading, setLoading] = useState(true);
-
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedJob, setSelectedJob] = useState(null);
+  const [search, setSearch] = useState("");
 
   const loadAll = async () => {
     try {
@@ -38,7 +37,6 @@ const Applications = () => {
     setIsModalOpen(true);
   };
 
-
   const handleApplied = async () => {
     try {
       const { onCampus, offCampus } = await fetchMyApplications();
@@ -48,56 +46,105 @@ const Applications = () => {
     }
   };
 
-  if (loading) return <div className="p-6">Loading…</div>;
+  const filteredJobs = jobs.filter((job) =>
+    job.jobTitle.toLowerCase().includes(search.toLowerCase())
+  );
+
+  const grouped = {
+    onCampus: filteredJobs.filter((job) => job.Type === "On-Campus"),
+    offCampus: filteredJobs.filter((job) => job.Type === "Off-Campus"),
+  };
+
+  const renderJobs = (jobsList) =>
+    jobsList.length === 0 ? (
+      <div className="text-gray-500 text-sm">No jobs available.</div>
+    ) : (
+      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {jobsList.map((job) => {
+          const application = myApps.find((a) => a.jobId._id === job._id);
+          const applied = !!application;
+          const status = application?.status;
+
+          return (
+            <div
+              key={job._id}
+              className="bg-white border border-gray-200 rounded-xl p-5 shadow-sm hover:shadow-md transition"
+            >
+              <h2 className="text-lg font-semibold text-[#0c4a42]">
+                {job.jobTitle}
+              </h2>
+              <p className="text-sm text-gray-600 mt-1">
+                {job.Company} &nbsp;•&nbsp; <em>{job.Type}</em>
+              </p>
+              <p className="text-sm text-gray-700 mt-3 line-clamp-3">
+                {job.jobDescription}
+              </p>
+
+              <div className="flex items-center justify-between mt-5">
+                {applied ? (
+                  <span className="px-3 py-1 text-green-800 bg-green-100 rounded-full text-xs font-medium">
+                    {status}
+                  </span>
+                ) : (
+                  <button
+                    onClick={() => openApplyModal(job)}
+                    className="text-sm px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                  >
+                    Apply
+                  </button>
+                )}
+                <span className="text-xs text-gray-500">
+                  Deadline:{" "}
+                  {job.Deadline
+                    ? new Date(job.Deadline).toLocaleDateString()
+                    : "N/A"}
+                </span>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    );
+
+  if (loading)
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <Sidebar />
+        <span className="text-sm text-gray-600">Loading job listings...</span>
+      </div>
+    );
 
   return (
-    <div className="flex">
+    <div className="flex min-h-screen bg-gray-100">
       <Sidebar />
-      <div className="flex-1 max-w-4xl mx-auto p-6 space-y-6">
-        <h1 className="text-3xl font-bold">Job Board</h1>
-        <ul className="grid gap-4 sm:grid-cols-2">
-          {jobs.map((job) => {
-            const applied = myApps.some(
-              (a) => a.jobId._id === job._id
-            );
-            const status = applied
-              ? myApps.find((a) => a.jobId._id === job._id).status
-              : null;
+      <main className="flex-1 max-w-6xl mx-auto px-6 py-10">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
+          <h1 className="text-3xl font-semibold text-[#0c4a42]">Job Board</h1>
+          <input
+            type="text"
+            placeholder="Search job title..."
+            className="px-4 py-2 w-full sm:w-64 border border-gray-300 rounded-md shadow-sm text-sm focus:outline-none focus:ring focus:border-blue-500"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+        </div>
 
-            return (
-              <li
-                key={job._id}
-                className="bg-white p-4 rounded-lg shadow flex flex-col"
-              >
-                <h2 className="text-xl font-semibold">{job.jobTitle}</h2>
-                <p className="text-sm text-gray-600">
-                  {job.Company} • <em>{job.Type}</em>
-                </p>
-                <p className="mt-2 text-gray-800 line-clamp-3">
-                  {job.jobDescription}
-                </p>
-                <div className="mt-auto flex items-center justify-between pt-4">
-                  {status ? (
-                    <span className="px-3 py-1 bg-green-100 text-green-800 rounded">
-                      {status}
-                    </span>
-                  ) : (
-                    <button
-                      onClick={() => openApplyModal(job)}
-                      className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-                    >
-                      Apply
-                    </button>
-                  )}
-                  <span className="text-xs text-gray-500">
-                    Deadline: {new Date(job.Deadline).toLocaleDateString()}
-                  </span>
-                </div>
-              </li>
-            );
-          })}
-        </ul>
-      </div>
+        <section className="space-y-10">
+          <div>
+            <h2 className="text-2xl font-medium text-[#0c4a42] mb-4">
+              On-Campus Jobs
+            </h2>
+            {renderJobs(grouped.onCampus)}
+          </div>
+
+          <div>
+            <h2 className="text-2xl font-medium text-[#0c4a42] mb-4">
+              Off-Campus Jobs
+            </h2>
+            {renderJobs(grouped.offCampus)}
+          </div>
+        </section>
+      </main>
 
       {isModalOpen && selectedJob && (
         <ApplyModal

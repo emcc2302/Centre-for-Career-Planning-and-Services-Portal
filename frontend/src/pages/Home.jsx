@@ -3,7 +3,7 @@ import Sidebar from '../components/Sidebar';
 
 const Home = () => {
   return (
-    <div className="flex min-h-screen bg-base-200">
+    <div className="flex min-h-screen bg-gray-50">
       <Sidebar />
       <div className="flex-1 p-6 pt-16 md:pt-6">
         <div className="max-w-5xl mx-auto space-y-10">
