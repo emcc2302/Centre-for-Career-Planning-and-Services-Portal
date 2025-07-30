@@ -1,13 +1,21 @@
 import axios from "axios";
 
 const BASE_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:3000";
+
 const api = axios.create({
   baseURL: BASE_URL,
-  headers: {
-    Authorization: `Bearer ${localStorage.getItem("ccps-token")}`,
-  },
 });
 
+// Attach latest token before every request
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem("ccps-token");
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
+// APIs
 export const fetchJobs = () =>
   api.get("/api/jobs").then((res) => res.data.jobs);
 

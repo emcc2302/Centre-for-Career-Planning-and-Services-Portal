@@ -11,9 +11,10 @@ const AllLinks = [
   { name: 'Saved Apps',     link: '/saved-applications', user: 'all'   },
   { name: 'Analytics',      link: '/analytics',       user: 'all'     },
   { name: 'Referrals',      link: '/referrals',        user: 'all'     },
-  { name: 'Resume Builder', link: '/resumebuilder',   user: 'all' },
+  { name: 'Resume Builder', link: '/resumebuilder',   user: 'student' },
   { name: 'Discussion Forum', link: '/discussion-forum',   user: 'student' },
-  { name: 'alumni', link: '/alumni',   user: 'all' },
+  { name: 'Alumni', link: '/alumni',   user: 'all' },
+  { name: 'Create Job', link: '/admin/create-job', user: 'admin' }
 ];
 
 const Sidebar = () => {

@@ -105,6 +105,7 @@ export const jobList = async (req, res) => {
             jobs: jobPostings
         });
     } catch (error) {
+        console.error("Error in jobList:", error);
         res.status(500).json({
             message: 'Error retrieving job postings',
             error: error.message
