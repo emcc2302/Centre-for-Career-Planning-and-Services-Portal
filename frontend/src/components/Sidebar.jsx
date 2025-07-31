@@ -1,112 +1,131 @@
-import React, { useState } from 'react';
-import { NavLink, Outlet } from 'react-router-dom';
-import { Menu, X } from 'lucide-react';
-import LogoutButton from "../pages/auth/LogoutButton"
-import { useAuthContext } from '../context/AuthContext';
-
-const AllLinks = [
-  { name: 'Home',           link: '/',            user: 'all'     },
-  { name: 'Profile',        link: '/profile',         user: 'student'     },
-  { name: 'Applications',   link: '/applications',    user: 'all'     },
-  { name: 'Saved Apps',     link: '/saved-applications', user: 'all'   },
-  { name: 'Analytics',      link: '/analytics',       user: 'all'     },
-  { name: 'Referrals',      link: '/referrals',        user: 'all'     },
-  { name: 'Resume Builder', link: '/resumebuilder',   user: 'student' },
-  { name: 'Discussion Forum', link: '/discussion-forum',   user: 'student' },
-  { name: 'Alumni', link: '/alumni',   user: 'all' },
-  { name: 'Create Job', link: '/admin/create-job', user: 'admin' }
-];
+// src/components/Sidebar.jsx
+import React, { useState } from "react";
+import { NavLink, Outlet } from "react-router-dom";
+import { Menu, X } from "lucide-react";
+import LogoutButton from "../pages/auth/LogoutButton";
+import { useAuthContext } from "../context/AuthContext";
 
 const Sidebar = () => {
   const { authUser } = useAuthContext();
   const [isOpen, setIsOpen] = useState(false);
 
-  const links = AllLinks.filter(
-    (l) => l.user === 'all' || l.user === authUser?.role
-  );
+  if (!authUser) return null;
 
   const navLinkClass = ({ isActive }) =>
-    `block px-6 py-3 font-montserrat hover:bg-[#13665b] ${
-      isActive ? 'bg-[#13665b] text-white font-semibold' : 'text-white'
+    `block px-6 py-3 text-sm font-medium rounded-lg transition-all duration-200 ${
+      isActive
+        ? "bg-[#13665b] text-white font-semibold"
+        : "text-white hover:bg-[#13665b] hover:text-white"
     }`;
+
+  const navItems = (
+    <>
+      <NavLink to="/" className={navLinkClass}>
+        Home
+      </NavLink>
+      <NavLink to="/applications" className={navLinkClass}>
+        Applications
+      </NavLink>
+      <NavLink to="/saved-applications" className={navLinkClass}>
+        Saved Apps
+      </NavLink>
+      <NavLink to="/analytics" className={navLinkClass}>
+        Analytics
+      </NavLink>
+      <NavLink to="/referrals" className={navLinkClass}>
+        Referrals
+      </NavLink>
+      <NavLink to="/alumni" className={navLinkClass}>
+        Alumni
+      </NavLink>
+
+      {authUser.role === "student" && (
+        <>
+          <NavLink to="/profile" className={navLinkClass}>
+            Profile
+          </NavLink>
+          <NavLink to="/resumebuilder" className={navLinkClass}>
+            Resume Builder
+          </NavLink>
+          <NavLink to="/discussion-forum" className={navLinkClass}>
+            Discussion Forum
+          </NavLink>
+        </>
+      )}
+
+      {authUser.role === "admin" && (
+        <NavLink to="/admin/create-job" className={navLinkClass}>
+          Create Job
+        </NavLink>
+      )}
+    </>
+  );
 
   return (
     <>
-      {/* ─── MOBILE TOP BAR ─────────────────────────────────────────── */}
-      <div className="md:hidden fixed top-0 left-0 right-0 h-16 bg-[#0fa18e] text-white px-4 flex items-center justify-between z-10">
+      {/* MOBILE/TABLET TOP BAR */}
+      <div className="md:hidden fixed top-0 left-0 right-0 h-16 bg-[#0fa18e] text-white px-4 flex items-center justify-between z-20 shadow-md">
         <NavLink to="/" className="flex items-center">
-          <img src="/images/CCPS.png" alt="Logo" className="h-10 w-10" />
-          <span className="ml-3 text-xl font-montserrat">CCPS</span>
+          <img src="/images/CCPS.png" alt="Logo" />
+          <span className="ml-3 text-xl font-semibold font-montserrat">CCPS</span>
         </NavLink>
         <button
-          onClick={() => setIsOpen((o) => !o)}
-          className="p-2 hover:bg-[#13665b] rounded"
+          onClick={() => setIsOpen((v) => !v)}
+          className="p-2 rounded hover:bg-[#13665b] transition"
         >
           {isOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
       </div>
 
-      {/* MOBILE OVERLAY */}
+      {/* MOBILE/TABLET OVERLAY */}
       {isOpen && (
         <div
-          className="md:hidden fixed inset-0 bg-black bg-opacity-40 z-20"
+          className="md:hidden fixed inset-0 bg-black bg-opacity-40 z-10"
           onClick={() => setIsOpen(false)}
         />
       )}
 
-      {/* MOBILE DRAWER */}
+      {/* MOBILE/TABLET DRAWER */}
       <div
-        className={`md:hidden fixed top-16 left-0 w-64 bg-[#0fa18e] h-[calc(100vh-4rem)] transform transition-transform duration-300 z-30 ${
-          isOpen ? 'translate-x-0' : '-translate-x-full'
+        className={`md:hidden fixed top-16 left-0 w-64 bg-[#0fa18e] h-[calc(100vh-4rem)] transition-transform duration-300 z-30 ${
+          isOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
-        <nav className="flex flex-col h-full justify-between py-4">
-          <div>
-            {links.map((l) => (
-              <NavLink
-                key={l.name}
-                to={l.link}
-                className={navLinkClass}
-                onClick={() => setIsOpen(false)}
-              >
-                {l.name}
-              </NavLink>
-            ))}
+        <div className="h-full flex flex-col justify-between">
+          <div
+            className="overflow-y-auto flex-1 space-y-1 py-4"
+            onClick={() => setIsOpen(false)}
+          >
+            {navItems}
           </div>
-          <div className="px-6">
+          <div className="px-6 pb-4">
             <LogoutButton />
           </div>
-        </nav>
+        </div>
       </div>
 
-      {/* ─── DESKTOP SIDEBAR ───────────────────────────────────────── */}
-      <aside className="hidden md:flex fixed top-0 left-0 h-full w-64 bg-[#0fa18e] flex-col justify-between py-8">
+      {/* DESKTOP SIDEBAR */}
+      <aside className="hidden md:flex fixed top-0 left-0 h-full w-64 bg-[#0fa18e] flex-col justify-between py-6 shadow-md z-10">
         <div>
           <NavLink to="/" className="flex items-center px-6 mb-8">
             <img src="/images/CCPS.png" alt="Logo" className="h-10 w-10" />
-            <span className="ml-3 text-2xl font-montserrat text-white">CCPS</span>
+            <span className="ml-3 text-2xl font-semibold font-montserrat text-white">
+              CCPS
+            </span>
           </NavLink>
-          <nav className="flex flex-col">
-            {links.map((l) => (
-              <NavLink
-                key={l.name}
-                to={l.link}
-                className={navLinkClass}
-              >
-                {l.name}
-              </NavLink>
-            ))}
+          <nav className="flex flex-col space-y-1 overflow-y-auto">
+            {navItems}
           </nav>
         </div>
-        <div className="px-6">
+        <div className="px-6 pb-4">
           <LogoutButton />
         </div>
       </aside>
 
-      {/* ─── PAGE CONTENT WRAPPER ──────────────────────────────────── */}
-      <div className="md:pl-64 pt-16">
+      {/* PAGE CONTENT */}
+      <main className="md:pl-64 pt-16 bg-gray-50 min-h-screen">
         <Outlet />
-      </div>
+      </main>
     </>
   );
 };
