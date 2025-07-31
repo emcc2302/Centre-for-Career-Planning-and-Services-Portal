@@ -8,7 +8,7 @@ function Project({ formData, handleArrayFieldChange, addItem, removeItem }) {
                 <button
                     type="button"
                     onClick={() => addItem('projects')}
-                    className="px-4 py-2 text-sm rounded-xl bg-blue-600 text-white hover:bg-blue-700 transition-colors"
+                    className="px-4 py-2 text-sm rounded-md bg-emerald-500 text-white hover:bg-emerald-700 transition-colors"
                 >
                    + Add Project
                 </button>
@@ -34,7 +34,7 @@ function Project({ formData, handleArrayFieldChange, addItem, removeItem }) {
                                 value={project.title}
                                 onChange={(e) => handleArrayFieldChange('projects', index, e)}
                                 required
-                                className="w-full p-2 border border-slate-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                className="w-full p-2 border border-slate-300 rounded focus:outline-none focus:ring-2 focus:ring-green-500"
                             />
                         </div>
                         <div>
@@ -45,7 +45,7 @@ function Project({ formData, handleArrayFieldChange, addItem, removeItem }) {
                                 value={project.technologies}
                                 onChange={(e) => handleArrayFieldChange('projects', index, e)}
                                 required
-                                className="w-full p-2 border border-slate-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                className="w-full p-2 border border-slate-300 rounded focus:outline-none focus:ring-2 focus:ring-green-500"
                                 placeholder="e.g., React, Node.js, MongoDB"
                             />
                         </div>
@@ -57,7 +57,7 @@ function Project({ formData, handleArrayFieldChange, addItem, removeItem }) {
                                 onChange={(e) => handleArrayFieldChange('projects', index, e)}
                                 required
                                 rows="3"
-                                className="w-full p-2 border border-slate-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                className="w-full p-2 border border-slate-300 rounded focus:outline-none focus:ring-2 focus:ring-green-500"
                                 placeholder="Describe the project, your role, and achievements"
                             />
                         </div>
@@ -68,7 +68,7 @@ function Project({ formData, handleArrayFieldChange, addItem, removeItem }) {
                                 name="link"
                                 value={project.link}
                                 onChange={(e) => handleArrayFieldChange('projects', index, e)}
-                                className="w-full p-2 border border-slate-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                className="w-full p-2 border border-slate-300 rounded focus:outline-none focus:ring-2 focus:ring-green-500"
                                 placeholder="https://github.com/yourusername/project"
                             />
                         </div>

@@ -32,7 +32,7 @@ const VerifyEmail = () => {
     return (
         <section className='fixed top-0 left-0 right-0 bottom-0 z-10 backdrop-blur-sm bg-black/30 flex justify-center items-center'>
             <form className='relative bg-white p-8 rounded-xl' onSubmit={handleSubmit}>
-                <h1 className='text-center text-2xl font-medium mb-1.5'>Verify Your Email</h1>
+                <h1 className='text-center text-2xl font-bold mb-1.5'>Verify Your Email</h1>
                 <div>
                     <p className='text-center mb-5'>Enter the 6-digit code sent to your email address</p>
 
@@ -45,12 +45,12 @@ const VerifyEmail = () => {
                         />
                     </div>
 
-                    <button disabled={loading} className="btn  btn-block btn-sm mt-2 bg-blue-400 hover:bg-blue-600 text-white">
+                    <button disabled={loading} className="btn  btn-block btn-sm mt-2 bg-emerald-400 hover:bg-emerald-600 text-white">
                         {loading ? <span className='loading loading-spinner'></span> : 'Verify'}
                     </button>
                 </div>
 
-                <p onClick={sendCode} className=' text-blue-400 hover:underline hover:text-blue-600 mt-2 inline-block cursor-pointer'>
+                <p onClick={sendCode} className=' text-emerald-800 hover:underline hover:text-emerald-600 mt-2 inline-block cursor-pointer'>
                     Send code again
                 </p>
 

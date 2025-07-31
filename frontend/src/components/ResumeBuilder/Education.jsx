@@ -8,7 +8,7 @@ function Education({ formData, handleArrayFieldChange, addItem, removeItem }) {
         <button
           type="button"
           onClick={() => addItem('education')}
-          className="px-4 py-2 text-sm rounded-xl bg-blue-600 text-white hover:bg-blue-700 transition-colors"
+          className="px-4 py-2 text-sm rounded-md bg-emerald-500 text-white hover:bg-emerald-700 transition-colors"
         >
           + Add Education
         </button>
@@ -41,7 +41,7 @@ function Education({ formData, handleArrayFieldChange, addItem, removeItem }) {
                 value={edu.institution}
                 onChange={(e) => handleArrayFieldChange('education', index, e)}
                 required
-                className="w-full p-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                className="w-full p-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-green-500 focus:outline-none"
               />
             </div>
 
@@ -55,7 +55,7 @@ function Education({ formData, handleArrayFieldChange, addItem, removeItem }) {
                 value={edu.degree}
                 onChange={(e) => handleArrayFieldChange('education', index, e)}
                 required
-                className="w-full p-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                className="w-full p-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-green-500 focus:outline-none"
               />
             </div>
 
@@ -69,7 +69,7 @@ function Education({ formData, handleArrayFieldChange, addItem, removeItem }) {
                 value={edu.field}
                 onChange={(e) => handleArrayFieldChange('education', index, e)}
                 required
-                className="w-full p-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                className="w-full p-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-green-500 focus:outline-none"
               />
             </div>
 
@@ -82,7 +82,7 @@ function Education({ formData, handleArrayFieldChange, addItem, removeItem }) {
                 name="gpa"
                 value={edu.gpa}
                 onChange={(e) => handleArrayFieldChange('education', index, e)}
-                className="w-full p-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                className="w-full p-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-green-500 focus:outline-none"
               />
             </div>
 
@@ -96,7 +96,7 @@ function Education({ formData, handleArrayFieldChange, addItem, removeItem }) {
                 value={edu.startDate}
                 onChange={(e) => handleArrayFieldChange('education', index, e)}
                 required
-                className="w-full p-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                className="w-full p-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-green-500 focus:outline-none"
               />
             </div>
 
@@ -109,7 +109,7 @@ function Education({ formData, handleArrayFieldChange, addItem, removeItem }) {
                 name="endDate"
                 value={edu.endDate}
                 onChange={(e) => handleArrayFieldChange('education', index, e)}
-                className="w-full p-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                className="w-full p-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-green-500 focus:outline-none"
               />
             </div>
           </div>

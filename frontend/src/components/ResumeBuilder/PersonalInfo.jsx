@@ -26,7 +26,7 @@ function PersonalInfo({ formData, setFormData }) {
             value={formData.personalInfo.name}
             onChange={handlePersonalInfoChange}
             required
-            className="w-full p-2 border border-slate-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full p-2 border border-slate-300 rounded focus:outline-none focus:ring-2 focus:ring-green-500"
             placeholder="Enter your full name"
           />
         </div>
@@ -40,7 +40,7 @@ function PersonalInfo({ formData, setFormData }) {
             value={formData.personalInfo.email}
             onChange={handlePersonalInfoChange}
             required
-            className="w-full p-2 border border-slate-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full p-2 border border-slate-300 rounded focus:outline-none focus:ring-2 focus:ring-green-500"
             placeholder="Enter your email"
           />
         </div>
@@ -54,7 +54,7 @@ function PersonalInfo({ formData, setFormData }) {
             value={formData.personalInfo.phone}
             onChange={handlePersonalInfoChange}
             required
-            className="w-full p-2 border border-slate-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full p-2 border border-slate-300 rounded focus:outline-none focus:ring-2 focus:ring-green-500"
             placeholder="Enter your phone number"
           />
         </div>
@@ -67,7 +67,7 @@ function PersonalInfo({ formData, setFormData }) {
             name="address"
             value={formData.personalInfo.address}
             onChange={handlePersonalInfoChange}
-            className="w-full p-2 border border-slate-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full p-2 border border-slate-300 rounded focus:outline-none focus:ring-2 focus:ring-green-500"
             placeholder="Enter your address"
           />
         </div>
@@ -80,7 +80,7 @@ function PersonalInfo({ formData, setFormData }) {
             name="linkedin"
             value={formData.personalInfo.linkedin}
             onChange={handlePersonalInfoChange}
-            className="w-full p-2 border border-slate-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full p-2 border border-slate-300 rounded focus:outline-none focus:ring-2 focus:ring-green-500"
             placeholder="https://linkedin.com/in/..."
           />
         </div>
@@ -93,7 +93,7 @@ function PersonalInfo({ formData, setFormData }) {
             name="github"
             value={formData.personalInfo.github}
             onChange={handlePersonalInfoChange}
-            className="w-full p-2 border border-slate-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full p-2 border border-slate-300 rounded focus:outline-none focus:ring-2 focus:ring-green-500"
             placeholder="https://github.com/..."
           />
         </div>

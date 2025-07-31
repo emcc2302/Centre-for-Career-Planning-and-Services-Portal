@@ -32,7 +32,7 @@ const ForgotPassword = () => {
     return (
         <section className='fixed top-0 left-0 right-0 bottom-0 z-10 backdrop-blur-sm bg-black/30 flex justify-center items-center'>
             <form className='relative bg-white p-8 rounded-xl' key={isSubmitted} onSubmit={handleSubmit}>
-                <h1 className='text-center text-2xl font-medium mb-1.5'>Forgot Password</h1>
+                <h1 className='text-center text-2xl font-bold mb-1.5'>Forgot Password</h1>
                 {!isSubmitted ?
                     <div>
                         <p className='text-center mb-5'>Enter your email and we'll send you a link to reset your password</p>
@@ -46,7 +46,7 @@ const ForgotPassword = () => {
                             />
                         </div>
 
-                        <button disabled={loading} className="btn  btn-block btn-sm mt-2 bg-blue-400 hover:bg-blue-600 text-white">
+                        <button disabled={loading} className="btn  btn-block btn-sm mt-2 bg-emerald-400 hover:bg-emerald-600 text-white">
                             {loading ? <span className='loading loading-spinner'></span> : 'Send Reset Link'}
                         </button>
                     </div>
@@ -60,7 +60,7 @@ const ForgotPassword = () => {
                     </>
                 }
 
-                <p onClick={clickOnBackToLogin} className=' text-blue-400 hover:underline hover:text-blue-600 mt-2 inline-block cursor-pointer'>
+                <p onClick={clickOnBackToLogin} className=' text-emerald-800 hover:underline hover:text-emerald-600 mt-2 inline-block cursor-pointer'>
                     Back to Login
                 </p>
 
