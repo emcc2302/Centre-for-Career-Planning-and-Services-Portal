@@ -145,7 +145,7 @@ function ResumeBuilder() {
         <div className="flex h-screen bg-slate-50">
             <Sidebar />
             <div className="flex-1 p-8 overflow-auto">
-                <div className="flex justify-between items-center mb-8">
+                <div className="flex justify-between items-center mb-8 mt-16 md:mt-0">
                     <h1 className="text-3xl font-bold text-[#0c4a42]">Resume Builder</h1>
                 </div>
 
@@ -174,7 +174,7 @@ function ResumeBuilder() {
                             type="submit"
                             disabled={loading}
                             className={`px-6 py-3 rounded-xl font-semibold text-white text-lg transition-colors duration-200 ${
-                                loading ? 'bg-blue-300 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'
+                                loading ? 'bg-blue-300 cursor-not-allowed' : 'bg-emerald-800 hover:bg-emerald-500'
                             }`}
                         >
                             {loading ? 'Generating Resume...' : 'Generate Resume PDF'}

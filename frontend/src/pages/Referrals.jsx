@@ -124,8 +124,8 @@ function Referrals() {
   return (
     <div className="flex h-screen bg-slate-100">
       <Sidebar />
-      <div className="flex-1 p-6 overflow-auto">
-        <h1 className="text-3xl font-bold text-gray-800 mb-6">Referral Requests</h1>
+      <div className="flex-1 p-12 overflow-auto">
+        <h1 className="text-3xl font-bold text-[#0c4a42] mb-5 mt-8 md:mt-0" >Referral Request</h1>
         
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2 bg-white rounded-lg shadow-md p-4 overflow-auto max-h-[calc(100vh-150px)]">
@@ -231,7 +231,7 @@ function Referrals() {
                     type="text" 
                     value={companyName}
                     onChange={(e) => setCompanyName(e.target.value)} 
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                     placeholder="e.g. Google, Amazon" 
                     required
                   />
@@ -243,7 +243,7 @@ function Referrals() {
                     type="text" 
                     value={jobId}
                     onChange={(e) => setJobId(e.target.value)} 
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                     placeholder="e.g. SWE-123456 or Software Engineer" 
                     required
                   />
@@ -256,7 +256,7 @@ function Referrals() {
                     type='text'
                     value={resumeLink}
                     onChange={(e) => setResumeLink(e.target.value)} 
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                     placeholder="https://drive.google.com/..." 
                     required
                   />
@@ -267,7 +267,7 @@ function Referrals() {
                   type="submit" 
                   disabled={isSubmitting}
                   className={`w-full py-2 px-4 rounded-md text-white font-medium ${
-                    isSubmitting ? 'bg-blue-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'
+                    isSubmitting ? 'bg-blue-400 cursor-not-allowed' : 'bg-emerald-500 hover:bg-emerald-700'
                   } transition duration-200`}
                 >
                   {isSubmitting ? 'Submitting...' : 'Request Referral'}
