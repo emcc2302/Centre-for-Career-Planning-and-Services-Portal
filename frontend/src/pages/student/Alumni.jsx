@@ -34,7 +34,7 @@ const Alumni = () => {
       <Sidebar />
       <section className="flex-1 overflow-y-auto pt-16 bg-gray-100 px-4">
         <div className="max-w-4xl mx-auto">
-          <h1 className="text-3xl font-bold text-center text-indigo-600 mb-4">
+          <h1 className="text-3xl mt-6 md:mt-0 font-bold text-center text-[#13665b] mb-4">
             Welcome to the Alumni Portal 🎓
           </h1>
           <p className="text-center text-gray-600 mb-8">
@@ -62,7 +62,7 @@ const Alumni = () => {
             />
             <button
               onClick={handleSearch}
-              className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700"
+              className="px-4 py-2 bg-teal-600 text-white rounded-md hover:bg-[#13665b] "
             >
               Search
             </button>
@@ -77,7 +77,7 @@ const Alumni = () => {
                   key={alum._id}
                   className="bg-white p-6 rounded-xl shadow hover:shadow-md transition"
                 >
-                  <h3 className="text-xl font-semibold text-indigo-600">{alum.name}</h3>
+                  <h3 className="text-xl font-semibold text-[#13665b] ">{alum.name}</h3>
                   <p>Email: {alum.Email || "N/A"}</p>
                   <p>Mobile: {alum.MobileNumber || "N/A"}</p>
                   <p>Company: {alum.company || "N/A"}</p>
@@ -88,7 +88,7 @@ const Alumni = () => {
                       href={alum.linkedin}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-blue-500 hover:underline"
+                      className="text-teal-600  hover:underline"
                     >
                       LinkedIn Profile
                     </a>

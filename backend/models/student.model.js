@@ -1,61 +1,78 @@
 import mongoose from "mongoose";
 
 const studentSchema = new mongoose.Schema({ 
-    ReferenceObject:{
-        type:mongoose.Schema.Types.ObjectID,
-        ref:'User'
-    },
+  ReferenceObject: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
+  },
 
-    Discipline:{
-        type: String,
-        required: true
-    },
-    Program: {
-        type: String,
-        default: ''
-    },
-    CGPA: {
-        type: Number,
-        min: 0,
-        max: 10,
-        default: null
-    },
+  Discipline: {
+    type: String,
+    required: true
+  },
 
-    // job status true if he is seeking off-campus placements
-    Jobstatus:[{
-        JobRerenceID:{
-        type:mongoose.Schema.Types.ObjectID,
-        ref:'JobPosting'
-        
-    },
-    ApplicationStatus:{enum:["applied","in-review","rejected","accepted"]},
-}
-],
-    
-    JobReferenceID:{
-        type:mongoose.Schema.Types.ObjectID,
-        ref:'JobPosting'
-    },
-    Status:{
-        type:String,
-        required:true
-    },
-    StudentID:{
-        type:String,
-        required:true,
-        unique: true
-    },
-    Batch:{
-        type:Number,
-        required:true
-    },  
-    SavedJobs:[{
-        type:mongoose.Schema.Types.ObjectID,
-        ref:'JobPosting'
-    }],
+  Program: {
+    type: String,
+    default: ''
+  },
 
-},{timestamps:true})
+  CGPA: {
+    type: Number,
+    min: 0,
+    max: 10,
+    default: null
+  },
 
-const Student = mongoose.model("Student",studentSchema);
+  // Job status: true if seeking off-campus placements
+  Jobstatus: [{
+    JobRerenceID: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'JobPosting'
+    },
+    ApplicationStatus: {
+      type: String,
+      enum: ["applied", "in-review", "rejected", "accepted"]
+    }
+  }],
 
+  JobReferenceID: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'JobPosting'
+  },
+
+  Status: {
+    type: String,
+    required: true
+  },
+
+  StudentID: {
+    type: String,
+    required: true,
+    unique: true
+  },
+
+  Batch: {
+    type: Number,
+    required: true
+  },
+
+  SavedJobs: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'JobPosting'
+  }],
+
+  // ✅ New Fields
+  resumeLink: {
+    type: String,
+    default: ""
+  },
+
+  profilePhotoURL: {
+    type: String,
+    default: "" // Store the image URL here
+  }
+
+}, { timestamps: true });
+
+const Student = mongoose.model("Student", studentSchema);
 export default Student;

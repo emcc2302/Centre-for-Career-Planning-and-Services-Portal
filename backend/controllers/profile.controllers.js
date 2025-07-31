@@ -10,7 +10,9 @@ export const createStudentProfile = async (req, res) => {
       program,
       cgpa,
       batch,
-      status
+      status,
+      imageUrl,
+      resumeUrl
     } = req.body;
 
     //  Validate required fields
@@ -47,6 +49,8 @@ export const createStudentProfile = async (req, res) => {
       CGPA: cgpa || null,
       Batch: batch,
       Status: status,
+      profilePhotoURL:imageUrl,
+      resumeLink:resumeUrl,
       Jobstatus: [],
       JobReferenceID: null,
       SavedJobs: []
@@ -84,6 +88,8 @@ export const getStudentProfile = async (req, res) => {
       discipline: student?.Discipline || "",
       program: student?.Program || "",
       cgpa: student?.CGPA || "",
+      imageUrl:student?.profilePhotoURL || "",
+      resumeUrl:student?.resumeLink || "",
     };
 
     return res.json(profile);
@@ -97,7 +103,7 @@ export const getStudentProfile = async (req, res) => {
 export const updateStudentProfile = async (req, res) => {
   try {
     const { userId } = req.params;
-    const { name, email, discipline, program, cgpa } = req.body;
+    const { name, email, discipline, program, cgpa,imageUrl,resumeUrl } = req.body;
 
     const student = await Student.findOne({ ReferenceObject: userId });
     if (!student) {  
@@ -118,6 +124,8 @@ export const updateStudentProfile = async (req, res) => {
     if (discipline) student.Discipline = discipline;
     if (program) student.Program = program;
     if (cgpa) student.CGPA = cgpa;
+    if (imageUrl) student.profilePhotoURL = imageUrl;
+    if (resumeUrl) student.resumeLink = resumeUrl;
     await student.save();
 
     return res.json({ message: "Profile updated successfully" });

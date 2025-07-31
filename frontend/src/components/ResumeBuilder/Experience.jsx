@@ -8,7 +8,7 @@ function Experience({ formData, handleArrayFieldChange, addItem, removeItem }) {
                 <button
                     type="button"
                     onClick={() => addItem('experience')}
-                    className="px-4 py-2 text-sm rounded-xl bg-blue-600 text-white hover:bg-blue-700 transition-colors"
+                    className="px-4 py-2 text-sm rounded-md bg-emerald-500 text-white hover:bg-emerald-700 transition-colors"
                 >
                     + Add Experience
                 </button>
@@ -40,7 +40,7 @@ function Experience({ formData, handleArrayFieldChange, addItem, removeItem }) {
                                 value={exp.company}
                                 onChange={(e) => handleArrayFieldChange('experience', index, e)}
                                 required
-                                className="w-full p-2 border border-slate-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                className="w-full p-2 border border-slate-300 rounded focus:outline-none focus:ring-2 focus:ring-green-500"
                             />
                         </div>
 
@@ -54,7 +54,7 @@ function Experience({ formData, handleArrayFieldChange, addItem, removeItem }) {
                                 value={exp.position}
                                 onChange={(e) => handleArrayFieldChange('experience', index, e)}
                                 required
-                                className="w-full p-2 border border-slate-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                className="w-full p-2 border border-slate-300 rounded focus:outline-none focus:ring-2 focus:ring-green-500"
                             />
                         </div>
 
@@ -68,7 +68,7 @@ function Experience({ formData, handleArrayFieldChange, addItem, removeItem }) {
                                 value={exp.location}
                                 onChange={(e) => handleArrayFieldChange('experience', index, e)}
                                 required
-                                className="w-full p-2 border border-slate-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                className="w-full p-2 border border-slate-300 rounded focus:outline-none focus:ring-2 focus:ring-green-500"
                             />
                         </div>
 
@@ -83,7 +83,7 @@ function Experience({ formData, handleArrayFieldChange, addItem, removeItem }) {
                                 required
                                 rows="3"
                                 placeholder="Describe your responsibilities and achievements"
-                                className="w-full p-2 border border-slate-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                className="w-full p-2 border border-slate-300 rounded focus:outline-none focus:ring-2 focus:ring-green-500"
                             />
                         </div>
 
@@ -97,7 +97,7 @@ function Experience({ formData, handleArrayFieldChange, addItem, removeItem }) {
                                 value={exp.startDate}
                                 onChange={(e) => handleArrayFieldChange('experience', index, e)}
                                 required
-                                className="w-full p-2 border border-slate-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                className="w-full p-2 border border-slate-300 rounded focus:outline-none focus:ring-2 focus:ring-green-500"
                             />
                         </div>
 
@@ -110,7 +110,7 @@ function Experience({ formData, handleArrayFieldChange, addItem, removeItem }) {
                                 name="endDate"
                                 value={exp.endDate}
                                 onChange={(e) => handleArrayFieldChange('experience', index, e)}
-                                className="w-full p-2 border border-slate-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                className="w-full p-2 border border-slate-300 rounded focus:outline-none focus:ring-2 focus:ring-green-500"
                             />
                         </div>
                     </div>
