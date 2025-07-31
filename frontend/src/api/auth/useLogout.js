@@ -1,36 +1,41 @@
-import {useState} from 'react'
-import { useAuthContext } from '../../context/AuthContext';
+import { useState } from 'react';
 import toast from 'react-hot-toast';
-import { useAppContext } from '../../context/AppContext';
+import { useNavigate } from 'react-router-dom';
+import { useAuthContext } from '../../context/AuthContext.jsx';
+import { useAppContext } from '../../context/AppContext.jsx';
 
 const useLogout = () => {
-   const [loading, setLoading] = useState(false);
-   const {setAuthUser} = useAuthContext();
-   const { backendUrl } = useAppContext();
+  const [loading, setLoading] = useState(false);
+  const { setAuthUser } = useAuthContext();
+  const { backendUrl } = useAppContext();
+  const navigate = useNavigate();
 
-   const logout = async()=>{
+  const logout = async () => {
     setLoading(true);
-    try{
-        const res = await fetch(`${backendUrl}/api/auth/logout`,{
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        });
-        const data = await res.json();
-        if(data.error) {throw new Error(data.error);}
-        localStorage.removeItem('ccps-user');
-        localStorage.removeItem('ccps-token');
-        setAuthUser(null);
-    }
-    catch(error){
-        toast.error(error.message);
-    }
-    finally{
-        setLoading(false);
-    }
-   }
-    return {loading, logout};
-}
+    try {
+      const res = await fetch(`${backendUrl}/api/auth/logout`, {
+        method: 'POST',
+        credentials: 'include', 
+      });
 
-export default useLogout
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.message || 'Logout failed');
+      }
+
+      localStorage.removeItem('ccps-user');
+      localStorage.removeItem('ccps-token');
+      setAuthUser(null);
+      toast.success('Logged out successfully!');
+      navigate('/login');
+    } catch (err) {
+      toast.error(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return { loading, logout };
+};
+
+export default useLogout;

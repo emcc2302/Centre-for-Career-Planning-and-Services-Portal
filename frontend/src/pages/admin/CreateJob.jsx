@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { createJobPosting } from "../../api/useCreate";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import Sidebar from "../../components/Sidebar";
 
 const CreateJob = () => {
   const navigate = useNavigate();
@@ -18,18 +19,16 @@ const CreateJob = () => {
     author: "",
     relevanceScore: ""
   });
+  const [submitting, setSubmitting] = useState(false);
 
   const handleChange = (e) => {
-      const { name, value } = e.target;
-      setForm((prev) => ({
-        ...prev,
-        [name]: value,
-      }));
-    };
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
+  };
 
-    const handleSubmit = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
+    setSubmitting(true);
     try {
       const token = localStorage.getItem("ccps-token");
       await createJobPosting(form, token);
@@ -38,94 +37,235 @@ const CreateJob = () => {
     } catch (err) {
       console.error(err);
       toast.error(err?.response?.data?.message || "Failed to create job");
+    } finally {
+      setSubmitting(false);
     }
   };
 
   return (
-    <div className="p-6 max-w-3xl mx-auto bg-base-100 rounded shadow mt-6">
-      <h2 className="text-2xl font-bold mb-6">Create New Job Posting</h2>
-      <form className="space-y-4" onSubmit={handleSubmit}>
-        <input name="jobTitle" placeholder="Job Title" className="input input-bordered w-full" onChange={handleChange} required />
-        <input name="Company" placeholder="Company Name" className="input input-bordered w-full" onChange={handleChange} required />
-        
-        <textarea
-          name="jobDescription"
-          placeholder="Job Description"
-          className="textarea textarea-bordered w-full"
-          rows="4"
-          onChange={handleChange}
-          required
-        />
+    <div className="flex min-h-screen bg-gray-50">
+      <Sidebar />
 
-        <input
-          name="requiredSkills"
-          placeholder="Required Skills (comma-separated)"
-          className="input input-bordered w-full"
-          onChange={handleChange}
-        />
+      {/* Main Content */}
+      <div className="flex-1 p-6 lg:ml-64">
+        <div className="max-w-3xl mx-auto bg-white rounded-2xl shadow-lg overflow-hidden">
+          {/* Header */}
+          <div className="bg-[#0c4a42] p-6">
+            <h1 className="text-2xl font-bold text-white">New Job Posting</h1>
+            <p className="text-green-200 mt-1">Fill in details to publish a job</p>
+          </div>
 
-        <select name="Type" className="select select-bordered w-full" onChange={handleChange} value={form.Type} required>
-          <option value="on-campus">On-Campus</option>
-          <option value="off-campus">Off-Campus</option>
-        </select>
+          {/* Form */}
+          <form onSubmit={handleSubmit} className="p-6 space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label htmlFor="jobTitle" className="block text-sm font-medium text-gray-700 mb-1">
+                  Job Title
+                </label>
+                <input
+                  id="jobTitle"
+                  name="jobTitle"
+                  type="text"
+                  required
+                  value={form.jobTitle}
+                  onChange={handleChange}
+                  placeholder="e.g. Frontend Engineer"
+                  className="w-full border-gray-300 rounded-lg shadow-sm focus:ring-green-500 focus:border-green-500"
+                />
+              </div>
+              <div>
+                <label htmlFor="Company" className="block text-sm font-medium text-gray-700 mb-1">
+                  Company Name
+                </label>
+                <input
+                  id="Company"
+                  name="Company"
+                  type="text"
+                  required
+                  value={form.Company}
+                  onChange={handleChange}
+                  placeholder="e.g. Acme Corp"
+                  className="w-full border-gray-300 rounded-lg shadow-sm focus:ring-green-500 focus:border-green-500"
+                />
+              </div>
+            </div>
 
-        <input
-          name="batch"
-          type="number"
-          placeholder="Eligible Batch (e.g., 2025)"
-          className="input input-bordered w-full"
-          onChange={handleChange}
-          required
-        />
+            <div>
+              <label htmlFor="jobDescription" className="block text-sm font-medium text-gray-700 mb-1">
+                Job Description
+              </label>
+              <textarea
+                id="jobDescription"
+                name="jobDescription"
+                required
+                rows={5}
+                value={form.jobDescription}
+                onChange={handleChange}
+                placeholder="Describe role, responsibilities, perks…"
+                className="w-full border-gray-300 rounded-lg shadow-sm focus:ring-green-500 focus:border-green-500 resize-none"
+              />
+            </div>
 
-        <label className="block">
-          <span className="text-sm font-medium text-gray-700">Application Deadline</span>
-          <input
-            name="Deadline"
-            type="date"
-            className="input input-bordered w-full mt-1"
-            onChange={handleChange}
-          />
-        </label>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label htmlFor="requiredSkills" className="block text-sm font-medium text-gray-700 mb-1">
+                  Required Skills
+                </label>
+                <input
+                  id="requiredSkills"
+                  name="requiredSkills"
+                  type="text"
+                  value={form.requiredSkills}
+                  onChange={handleChange}
+                  placeholder="e.g. React, Node.js"
+                  className="w-full border-gray-300 rounded-lg shadow-sm focus:ring-green-500 focus:border-green-500"
+                />
+              </div>
+              <div>
+                <label htmlFor="Type" className="block text-sm font-medium text-gray-700 mb-1">
+                  Job Type
+                </label>
+                <select
+                  id="Type"
+                  name="Type"
+                  required
+                  value={form.Type}
+                  onChange={handleChange}
+                  className="w-full border-gray-300 rounded-lg shadow-sm focus:ring-green-500 focus:border-green-500"
+                >
+                  <option value="on-campus">On-Campus</option>
+                  <option value="off-campus">Off-Campus</option>
+                </select>
+              </div>
+            </div>
 
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label htmlFor="batch" className="block text-sm font-medium text-gray-700 mb-1">
+                  Eligible Batch
+                </label>
+                <input
+                  id="batch"
+                  name="batch"
+                  type="number"
+                  required
+                  value={form.batch}
+                  onChange={handleChange}
+                  placeholder="e.g. 2025"
+                  className="w-full border-gray-300 rounded-lg shadow-sm focus:ring-green-500 focus:border-green-500"
+                />
+              </div>
+              <div>
+                <label htmlFor="relevanceScore" className="block text-sm font-medium text-gray-700 mb-1">
+                  Relevance Score
+                </label>
+                <input
+                  id="relevanceScore"
+                  name="relevanceScore"
+                  type="number"
+                  step="0.1"
+                  value={form.relevanceScore}
+                  onChange={handleChange}
+                  placeholder="Optional"
+                  className="w-full border-gray-300 rounded-lg shadow-sm focus:ring-green-500 focus:border-green-500"
+                />
+              </div>
+            </div>
 
-        <input
-          name="ApplicationLink"
-          placeholder="Application Link"
-          className="input input-bordered w-full"
-          onChange={handleChange}
-        />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label htmlFor="Deadline" className="block text-sm font-medium text-gray-700 mb-1">
+                  Application Deadline
+                </label>
+                <input
+                  id="Deadline"
+                  name="Deadline"
+                  type="date"
+                  value={form.Deadline}
+                  onChange={handleChange}
+                  className="w-full border-gray-300 rounded-lg shadow-sm focus:ring-green-500 focus:border-green-500"
+                />
+              </div>
+              <div>
+                <label htmlFor="Expiry" className="block text-sm font-medium text-gray-700 mb-1">
+                  Post Expiry Date
+                </label>
+                <input
+                  id="Expiry"
+                  name="Expiry"
+                  type="date"
+                  value={form.Expiry}
+                  onChange={handleChange}
+                  className="w-full border-gray-300 rounded-lg shadow-sm focus:ring-green-500 focus:border-green-500"
+                />
+              </div>
+            </div>
 
-        <label className="block">
-          <span className="text-sm font-medium text-gray-700">Post Expiry Date</span>
-          <input
-            name="Expiry"
-            type="date"
-            className="input input-bordered w-full mt-1"
-            onChange={handleChange}
-          />
-        </label>
+            <div>
+              <label htmlFor="ApplicationLink" className="block text-sm font-medium text-gray-700 mb-1">
+                Application Link (optional)
+              </label>
+              <input
+                id="ApplicationLink"
+                name="ApplicationLink"
+                type="url"
+                value={form.ApplicationLink}
+                onChange={handleChange}
+                placeholder="https://apply.here"
+                className="w-full border-gray-300 rounded-lg shadow-sm focus:ring-green-500 focus:border-green-500"
+              />
+            </div>
 
-        <input
-          name="author"
-          placeholder="Author (Optional)"
-          className="input input-bordered w-full"
-          onChange={handleChange}
-        />
+            <div>
+              <label htmlFor="author" className="block text-sm font-medium text-gray-700 mb-1">
+                Author (optional)
+              </label>
+              <input
+                id="author"
+                name="author"
+                type="text"
+                value={form.author}
+                onChange={handleChange}
+                placeholder="Your name"
+                className="w-full border-gray-300 rounded-lg shadow-sm focus:ring-green-500 focus:border-green-500"
+              />
+            </div>
 
-        <input
-          name="relevanceScore"
-          type="number"
-          step="0.1"
-          placeholder="Relevance Score (Optional)"
-          className="input input-bordered w-full"
-          onChange={handleChange}
-        />
-
-        <button type="submit" className="btn btn-primary w-full">
-          Create Job
-        </button>
-      </form>
+            <div className="flex justify-end space-x-4">
+              <button
+                type="button"
+                onClick={() => navigate("/admin/jobs")}
+                disabled={submitting}
+                className="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 disabled:opacity-50 transition"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                disabled={submitting}
+                className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50 flex items-center space-x-2 transition"
+              >
+                {submitting && (
+                  <svg
+                    className="w-5 h-5 animate-spin text-white"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle cx="12" cy="12" r="10" strokeWidth="4" className="opacity-25" />
+                    <path
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8v4l3-3-3-3v4a8 8 0 10-8 8z"
+                      className="opacity-75"
+                    />
+                  </svg>
+                )}
+                <span>{submitting ? "Creating..." : "Create Job"}</span>
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
   );
 };

@@ -1,12 +1,10 @@
 import { useEffect, useState } from "react";
 import { useAuthContext } from "../../context/AuthContext";
-
 import {
   getStudentProfile,
   updateStudentProfile,
   createStudentProfile,
 } from "../../api/profile/useStudentProfile";
-
 import toast from "react-hot-toast";
 import Sidebar from "../../components/Sidebar";
 
@@ -17,6 +15,8 @@ const initialData = {
   discipline: "",
   program: "",
   cgpa: "",
+  imageUrl: "",
+  resumeUrl: "",
 };
 
 export default function Profile() {
@@ -33,13 +33,21 @@ export default function Profile() {
     if (!authUser?._id) return;
     setLoading(true);
     getStudentProfile(authUser._id)
-      .then(data => {
+      .then((data) => {
         setProfile({ ...initialData, ...data });
         setFormData({ ...initialData, ...data });
       })
       .catch(() => {
-        setProfile(prev => ({ ...prev, name: authUser.name, email: authUser.email }));
-        setFormData(prev => ({ ...prev, name: authUser.name, email: authUser.email }));
+        setProfile((prev) => ({
+          ...prev,
+          name: authUser.name,
+          email: authUser.email,
+        }));
+        setFormData((prev) => ({
+          ...prev,
+          name: authUser.name,
+          email: authUser.email,
+        }));
       })
       .finally(() => setLoading(false));
   }, [authUser]);
@@ -49,32 +57,28 @@ export default function Profile() {
   };
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
-  // TODO: same id no cannot be added so add toast for that. 
-  const payload = { ...formData, batch: 2025, status: "active" };
-  try {
-    if (!profile.studentID) {
-      await createStudentProfile(authUser._id, payload);
-      toast.success("Profile created successfully!");
-    } else {
-      await updateStudentProfile(authUser._id, payload);
-      toast.success("Profile updated successfully!");
+    e.preventDefault();
+    const payload = { ...formData, batch: 2025, status: "active" };
+    try {
+      if (!profile.studentID) {
+        await createStudentProfile(authUser._id, payload);
+        toast.success("Profile created successfully!");
+      } else {
+        await updateStudentProfile(authUser._id, payload);
+        toast.success("Profile updated successfully!");
+      }
+      const updated = await getStudentProfile(authUser._id);
+      setProfile({ ...initialData, ...updated });
+      setFormData({ ...initialData, ...updated });
+      setShowForm(false);
+    } catch (err) {
+      if (err.response?.data?.message?.includes("already exists")) {
+        toast.error("A profile with this Student ID already exists.");
+      } else {
+        toast.error("An error occurred. Please try again.");
+      }
     }
-
-    const updated = await getStudentProfile(authUser._id);
-    setProfile({ ...initialData, ...updated });
-    setFormData({ ...initialData, ...updated });
-    setShowForm(false);
-  } catch (err) {
-    if (err.response?.data?.message?.includes("already exists")) {
-      toast.error("A profile with this Student ID already exists.");
-    } else {
-      toast.error("An error occurred. Please try again.");
-    }
-    console.error(err);
-  }
-};
-
+  };
 
   if (loading) {
     return (
@@ -88,107 +92,142 @@ export default function Profile() {
   }
 
   return (
-    <div className="flex min-h-screen bg-gray-100 pt-20">
-      <Sidebar />
-      <main className="flex-1 p-6 flex justify-center items-start">
-        <div className="w-full max-w-3xl bg-white  shadow-md overflow-hidden">
-          <div className="bg-teal-600 p-6">
-            <h1 className="text-3xl font-bold text-white">Student Profile</h1>
-          </div>
-          <div className="p-6">
-            {!showForm ? (
-              <>
-                {isIncomplete && (
-                  <div className="mb-4 px-4 py-2 bg-red-100 text-red-700 rounded">
-                    Your profile is incomplete. Please update the missing fields.
+  <>
+    <div className="flex bg-[#f7fafc] min-h-screen">
+      <Sidebar />    
+      <main className="flex-1 flex justify-center items-start pt-24 px-4 sm:px-6 lg:px-8">
+        
+        <section className="w-full max-w-3xl bg-white shadow-xl rounded-2xl overflow-visible pl-0 pt-28 pb-8 relative flex flex-col items-center transition-all duration-200 sm:flex-row">
+          {/* <div className="w-2 sm:w-4 bg-[#0fa18e]  absolute left-0 top-0 bottom-0 ml-2"></div> */}
+          <div className="flex-1 w-full px-6">
+            {/* Profile Image */}
+            <div className="mt-16 absolute -top-20 left-1/2 -translate-x-1/2">
+              <div className="rounded-full border-4 border-white bg-gradient-to-br from-cyan-400 to-[#13665b] p-1 shadow-md">
+                {profile.imageUrl ? (
+                  <img
+                    src={profile.imageUrl}
+                    alt="Profile"
+                    className="h-32 w-32 rounded-full object-cover bg-white"
+                  />
+                ) : (
+                  <div className="h-32 w-32 rounded-full bg-cyan-300 flex items-center justify-center text-white font-extrabold text-5xl uppercase">
+                    {profile.name?.charAt(0) || "U"}
                   </div>
                 )}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-gray-700">
-                  <div>
-                    <p className="font-semibold">Name</p>
-                    <p>{profile.name || "N/A"}</p>
+              </div>
+            </div>
+
+            {/* Profile Info */}
+            <div className="mt-8 w-full flex flex-col items-center text-center">
+              <h1 className="text-2xl sm:text-3xl font-bold text-gray-800">{profile.name || "Your Name"}</h1>
+              <p className="text-sm text-gray-500">{profile.email}</p>
+
+              {!showForm && isIncomplete && (
+                <div className="mt-4 w-full text-sm px-4 py-2 bg-amber-100 text-amber-900 rounded-md font-medium text-center">
+                  Your profile is incomplete. Please update the missing fields.
+                </div>
+              )}
+            </div>
+
+            {/* Profile Data or Form */}
+            <div className="mt-6 w-full">
+              {!showForm ? (
+                <>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+                    <Info label="Student ID" value={profile.studentID} />
+                    <Info label="Discipline" value={profile.discipline} />
+                    <Info label="Program" value={profile.program} />
+                    <Info label="CGPA" value={profile.cgpa} />
+                    {profile.resumeUrl && (
+                      <div className="sm:col-span-2 text-center">
+                        <a
+                          href={profile.resumeUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-sky-600 hover:text-sky-800 underline font-semibold"
+                        >
+                          View Resume
+                        </a>
+                      </div>
+                    )}
                   </div>
-                  <div>
-                    <p className="font-semibold">Email</p>
-                    <p>{profile.email || "N/A"}</p>
+                  <div className="flex flex-wrap justify-center gap-4">
+                    <button
+                      onClick={() => setShowForm(true)}
+                      className="bg-[#0fa18e] hover:bg-[#13665b] text-white py-2 px-6 rounded-full font-semibold shadow-md transition-all duration-150"
+                    >
+                      {isIncomplete ? "Complete Profile" : "Edit Profile"}
+                    </button>
+                    <a
+                      href="/referrals"
+                      className="bg-white border border-emerald-500 text-emerald-600 hover:bg-emerald-50 py-2 px-6 rounded-full font-semibold transition-all duration-150 shadow-sm"
+                    >
+                      View Referrals
+                    </a>
+                    <a
+                      href="/applications"
+                      className="bg-gray-100 hover:bg-gray-200 text-gray-800 py-2 px-6 rounded-full font-semibold border transition-all duration-150 shadow-sm"
+                    >
+                      Saved Applications
+                    </a>
                   </div>
-                  {!isIncomplete && (
-                    <>
-                      <div>
-                        <p className="font-semibold">Student ID</p>
-                        <p>{profile.studentID}</p>
+                </>
+              ) : (
+                <form onSubmit={handleSubmit} className="space-y-4 w-full mt-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {[
+                      { name: "name", label: "Full Name", type: "text" },
+                      { name: "email", label: "Email", type: "email" },
+                      { name: "studentID", label: "Student ID", type: "text" },
+                      { name: "discipline", label: "Discipline", type: "text" },
+                      { name: "program", label: "Program", type: "text" },
+                      { name: "cgpa", label: "CGPA", type: "number", step: "0.01", min: "0", max: "10" },
+                      { name: "imageUrl", label: "Profile Image URL", type: "url" },
+                      { name: "resumeUrl", label: "Resume URL", type: "url" },
+                    ].map((field) => (
+                      <div key={field.name}>
+                        <label className="block mb-1 text-sm font-medium text-gray-700">{field.label}</label>
+                        <input
+                          {...field}
+                          value={formData[field.name]}
+                          onChange={handleChange}
+                          className="w-full border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-emerald-300 outline-none"
+                          required={field.name !== "resumeUrl" && field.name !== "imageUrl"}
+                        />
                       </div>
-                      <div>
-                        <p className="font-semibold">Discipline</p>
-                        <p>{profile.discipline}</p>
-                      </div>
-                      <div>
-                        <p className="font-semibold">Program</p>
-                        <p>{profile.program}</p>
-                      </div>
-                      <div>
-                        <p className="font-semibold">CGPA</p>
-                        <p>{profile.cgpa}</p>
-                      </div>
-                    </>
-                  )}
-                </div>
-                <div className="mt-6 text-center">
-                  <button
-                    onClick={() => setShowForm(true)}
-                    className="inline-block bg-teal-600 hover:bg-teal-700 text-white py-2 px-5 rounded-lg font-medium transition"
-                  >
-                    {isIncomplete ? "Complete Profile" : "Edit Profile"}
-                  </button>
-                </div>
-              </>
-            ) : (
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {[
-                    { name: 'name', label: 'Full Name', type: 'text' },
-                    { name: 'email', label: 'Email Address', type: 'email' },
-                    { name: 'studentID', label: 'Student ID', type: 'text' },
-                    { name: 'discipline', label: 'Discipline', type: 'text' },
-                    { name: 'program', label: 'Program', type: 'text' },
-                    { name: 'cgpa', label: 'CGPA', type: 'number', step: '0.01', min: '0', max: '10' },
-                  ].map(field => (
-                    <div key={field.name} className="flex flex-col">
-                      <label className="mb-1 font-semibold text-gray-600">{field.label}</label>
-                      <input
-                        type={field.type}
-                        name={field.name}
-                        value={formData[field.name]}
-                        onChange={handleChange}
-                        step={field.step}
-                        min={field.min}
-                        max={field.max}
-                        className="border border-gray-300 rounded p-2 focus:outline-none focus:ring-2 focus:ring-teal-500"
-                        required
-                      />
-                    </div>
-                  ))}
-                </div>
-                <div className="flex justify-center space-x-4 mt-4">
-                  <button
-                    type="submit"
-                    className="bg-green-600 hover:bg-green-700 text-white py-2 px-6 font-medium transition"
-                  >
-                    Save
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setShowForm(false)}
-                    className="bg-gray-400 hover:bg-gray-500 text-white py-2 px-6  font-medium transition"
-                  >
-                    Cancel
-                  </button>
-                </div>
-              </form>
-            )}
+                    ))}
+                  </div>
+                  <div className="flex justify-center gap-4">
+                    <button
+                      type="submit"
+                      className="bg-emerald-500 hover:bg-emerald-600 text-white font-semibold py-2 px-6 rounded-full shadow-md transition-all duration-150"
+                    >
+                      Save
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setShowForm(false)}
+                      className="bg-gray-500 hover:bg-gray-600 text-white font-semibold py-2 px-6 rounded-full transition-all duration-150"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </form>
+              )}
+            </div>
           </div>
-        </div>
+        </section>
       </main>
+    </div>
+  </>  
+  );
+}
+
+function Info({ label, value }) {
+  return (
+    <div className="bg-[#f8fafc] rounded p-3">
+      <span className="block font-bold text-gray-500 text-xs uppercase tracking-wide mb-1">{label}</span>
+      <span className="text-gray-800 font-semibold text-lg break-words">{value || "—"}</span>
     </div>
   );
 }
