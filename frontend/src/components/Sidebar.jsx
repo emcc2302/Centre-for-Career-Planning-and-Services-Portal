@@ -14,7 +14,8 @@ const AllLinks = [
   { name: 'Resume Builder', link: '/resumebuilder',   user: 'student' },
   { name: 'Discussion Forum', link: '/discussion-forum',   user: 'student' },
   { name: 'Alumni', link: '/alumni',   user: 'all' },
-  { name: 'Create Job', link: '/admin/create-job', user: 'admin' }
+  { name: 'Create Job', link: '/admin/create-job', user: 'admin' },
+  { name: 'Add Alumni', link: '/add-alumni', user: 'admin' }
 ];
 
 const Sidebar = () => {
