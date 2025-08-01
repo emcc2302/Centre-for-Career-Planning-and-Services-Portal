@@ -17,7 +17,7 @@ const CreateJob = () => {
     ApplicationLink: "",
     Expiry: "",
     author: "",
-    relevanceScore: ""
+    relevanceScore: "",
   });
   const [submitting, setSubmitting] = useState(false);
 
@@ -27,39 +27,85 @@ const CreateJob = () => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setSubmitting(true);
-    try {
-      const token = localStorage.getItem("ccps-token");
-      await createJobPosting(form, token);
-      toast.success("Job created successfully!");
-      navigate("/admin/jobs");
-    } catch (err) {
-      console.error(err);
-      toast.error(err?.response?.data?.message || "Failed to create job");
-    } finally {
-      setSubmitting(false);
-    }
-  };
+  e.preventDefault();
+
+  // Get today's date at start of day (midnight)
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  // Parse deadlines if present (they can be empty strings)
+  const deadlineDate = form.Deadline ? new Date(form.Deadline) : null;
+  const expiryDate = form.Expiry ? new Date(form.Expiry) : null;
+
+  // Check deadline date validity
+  if (deadlineDate && deadlineDate < today) {
+    toast.error("Application Deadline cannot be before today's date.");
+    setSubmitting(false);
+    return;
+  }
+
+  // Check expiry date validity
+  if (expiryDate && expiryDate < today) {
+    toast.error("Post Expiry Date cannot be before today's date.");
+    setSubmitting(false);
+    return;
+  }
+
+  // Optional: If you want to ensure Expiry date is after or equal to Deadline
+  if (deadlineDate && expiryDate && expiryDate < deadlineDate) {
+    toast.error("Post Expiry Date cannot be before Application Deadline.");
+    setSubmitting(false);
+    return;
+  }
+
+  setSubmitting(true);
+  try {
+    const token = localStorage.getItem("ccps-token");
+    await createJobPosting(form, token);
+    toast.success("Job created successfully!");
+    setForm({
+      jobTitle: "",
+      jobDescription: "",
+      Company: "",
+      requiredSkills: "",
+      Type: "on-campus",
+      batch: "",
+      Deadline: "",
+      ApplicationLink: "",
+      Expiry: "",
+      author: "",
+      relevanceScore: "",
+    });
+  } catch (err) {
+    console.error(err);
+    toast.error(err?.response?.data?.message || "Failed to create job");
+  } finally {
+    setSubmitting(false);
+  }
+};
+
 
   return (
     <div className="flex min-h-screen bg-gray-50">
       <Sidebar />
 
       {/* Main Content */}
-      <div className="flex-1 p-6 lg:ml-64">
+      <main className="flex-1 p-6 pt-20 md:pt-8 w-full">
         <div className="max-w-3xl mx-auto bg-white rounded-2xl shadow-lg overflow-hidden">
           {/* Header */}
           <div className="bg-[#0c4a42] p-6">
             <h1 className="text-2xl font-bold text-white">New Job Posting</h1>
-            <p className="text-green-200 mt-1">Fill in details to publish a job</p>
+            <p className="text-green-300 mt-1">Fill in details to publish a job</p>
           </div>
 
           {/* Form */}
           <form onSubmit={handleSubmit} className="p-6 space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label htmlFor="jobTitle" className="block text-sm font-medium text-gray-700 mb-1">
+                <label
+                  htmlFor="jobTitle"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
                   Job Title
                 </label>
                 <input
@@ -70,11 +116,21 @@ const CreateJob = () => {
                   value={form.jobTitle}
                   onChange={handleChange}
                   placeholder="e.g. Frontend Engineer"
-                  className="w-full border-gray-300 rounded-lg shadow-sm focus:ring-green-500 focus:border-green-500"
+                  className="
+                    w-full border border-gray-300 rounded-lg 
+                    px-4 py-2 text-gray-900 
+                    shadow-sm 
+                    focus:outline-none 
+                    focus:ring-2 focus:ring-green-600 focus:border-green-600
+                    transition
+                  "
                 />
               </div>
               <div>
-                <label htmlFor="Company" className="block text-sm font-medium text-gray-700 mb-1">
+                <label
+                  htmlFor="Company"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
                   Company Name
                 </label>
                 <input
@@ -85,13 +141,23 @@ const CreateJob = () => {
                   value={form.Company}
                   onChange={handleChange}
                   placeholder="e.g. Acme Corp"
-                  className="w-full border-gray-300 rounded-lg shadow-sm focus:ring-green-500 focus:border-green-500"
+                  className="
+                    w-full border border-gray-300 rounded-lg 
+                    px-4 py-2 text-gray-900 
+                    shadow-sm 
+                    focus:outline-none 
+                    focus:ring-2 focus:ring-green-600 focus:border-green-600
+                    transition
+                  "
                 />
               </div>
             </div>
 
             <div>
-              <label htmlFor="jobDescription" className="block text-sm font-medium text-gray-700 mb-1">
+              <label
+                htmlFor="jobDescription"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
                 Job Description
               </label>
               <textarea
@@ -102,13 +168,23 @@ const CreateJob = () => {
                 value={form.jobDescription}
                 onChange={handleChange}
                 placeholder="Describe role, responsibilities, perks…"
-                className="w-full border-gray-300 rounded-lg shadow-sm focus:ring-green-500 focus:border-green-500 resize-none"
+                className="
+                  w-full border border-gray-300 rounded-lg 
+                  px-4 py-2 text-gray-900 
+                  shadow-sm resize-none
+                  focus:outline-none 
+                  focus:ring-2 focus:ring-green-600 focus:border-green-600
+                  transition
+                "
               />
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label htmlFor="requiredSkills" className="block text-sm font-medium text-gray-700 mb-1">
+                <label
+                  htmlFor="requiredSkills"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
                   Required Skills
                 </label>
                 <input
@@ -118,11 +194,21 @@ const CreateJob = () => {
                   value={form.requiredSkills}
                   onChange={handleChange}
                   placeholder="e.g. React, Node.js"
-                  className="w-full border-gray-300 rounded-lg shadow-sm focus:ring-green-500 focus:border-green-500"
+                  className="
+                    w-full border border-gray-300 rounded-lg 
+                    px-4 py-2 text-gray-900 
+                    shadow-sm 
+                    focus:outline-none 
+                    focus:ring-2 focus:ring-green-600 focus:border-green-600
+                    transition
+                  "
                 />
               </div>
               <div>
-                <label htmlFor="Type" className="block text-sm font-medium text-gray-700 mb-1">
+                <label
+                  htmlFor="Type"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
                   Job Type
                 </label>
                 <select
@@ -131,7 +217,14 @@ const CreateJob = () => {
                   required
                   value={form.Type}
                   onChange={handleChange}
-                  className="w-full border-gray-300 rounded-lg shadow-sm focus:ring-green-500 focus:border-green-500"
+                  className="
+                    w-full border border-gray-300 rounded-lg 
+                    px-4 py-2 text-gray-900 
+                    shadow-sm 
+                    focus:outline-none 
+                    focus:ring-2 focus:ring-green-600 focus:border-green-600
+                    transition
+                  "
                 >
                   <option value="on-campus">On-Campus</option>
                   <option value="off-campus">Off-Campus</option>
@@ -141,7 +234,10 @@ const CreateJob = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label htmlFor="batch" className="block text-sm font-medium text-gray-700 mb-1">
+                <label
+                  htmlFor="batch"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
                   Eligible Batch
                 </label>
                 <input
@@ -152,11 +248,21 @@ const CreateJob = () => {
                   value={form.batch}
                   onChange={handleChange}
                   placeholder="e.g. 2025"
-                  className="w-full border-gray-300 rounded-lg shadow-sm focus:ring-green-500 focus:border-green-500"
+                  className="
+                    w-full border border-gray-300 rounded-lg 
+                    px-4 py-2 text-gray-900 
+                    shadow-sm 
+                    focus:outline-none 
+                    focus:ring-2 focus:ring-green-600 focus:border-green-600
+                    transition
+                  "
                 />
               </div>
               <div>
-                <label htmlFor="relevanceScore" className="block text-sm font-medium text-gray-700 mb-1">
+                <label
+                  htmlFor="relevanceScore"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
                   Relevance Score
                 </label>
                 <input
@@ -167,14 +273,24 @@ const CreateJob = () => {
                   value={form.relevanceScore}
                   onChange={handleChange}
                   placeholder="Optional"
-                  className="w-full border-gray-300 rounded-lg shadow-sm focus:ring-green-500 focus:border-green-500"
+                  className="
+                    w-full border border-gray-300 rounded-lg 
+                    px-4 py-2 text-gray-900 
+                    shadow-sm 
+                    focus:outline-none 
+                    focus:ring-2 focus:ring-green-600 focus:border-green-600
+                    transition
+                  "
                 />
               </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label htmlFor="Deadline" className="block text-sm font-medium text-gray-700 mb-1">
+                <label
+                  htmlFor="Deadline"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
                   Application Deadline
                 </label>
                 <input
@@ -183,11 +299,21 @@ const CreateJob = () => {
                   type="date"
                   value={form.Deadline}
                   onChange={handleChange}
-                  className="w-full border-gray-300 rounded-lg shadow-sm focus:ring-green-500 focus:border-green-500"
+                  className="
+                    w-full border border-gray-300 rounded-lg 
+                    px-4 py-2 text-gray-900 
+                    shadow-sm 
+                    focus:outline-none 
+                    focus:ring-2 focus:ring-green-600 focus:border-green-600
+                    transition
+                  "
                 />
               </div>
               <div>
-                <label htmlFor="Expiry" className="block text-sm font-medium text-gray-700 mb-1">
+                <label
+                  htmlFor="Expiry"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
                   Post Expiry Date
                 </label>
                 <input
@@ -196,13 +322,23 @@ const CreateJob = () => {
                   type="date"
                   value={form.Expiry}
                   onChange={handleChange}
-                  className="w-full border-gray-300 rounded-lg shadow-sm focus:ring-green-500 focus:border-green-500"
+                  className="
+                    w-full border border-gray-300 rounded-lg 
+                    px-4 py-2 text-gray-900 
+                    shadow-sm 
+                    focus:outline-none 
+                    focus:ring-2 focus:ring-green-600 focus:border-green-600
+                    transition
+                  "
                 />
               </div>
             </div>
 
             <div>
-              <label htmlFor="ApplicationLink" className="block text-sm font-medium text-gray-700 mb-1">
+              <label
+                htmlFor="ApplicationLink"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
                 Application Link (optional)
               </label>
               <input
@@ -212,12 +348,22 @@ const CreateJob = () => {
                 value={form.ApplicationLink}
                 onChange={handleChange}
                 placeholder="https://apply.here"
-                className="w-full border-gray-300 rounded-lg shadow-sm focus:ring-green-500 focus:border-green-500"
+                className="
+                  w-full border border-gray-300 rounded-lg 
+                  px-4 py-2 text-gray-900 
+                  shadow-sm 
+                  focus:outline-none 
+                  focus:ring-2 focus:ring-green-600 focus:border-green-600
+                  transition
+                "
               />
             </div>
 
             <div>
-              <label htmlFor="author" className="block text-sm font-medium text-gray-700 mb-1">
+              <label
+                htmlFor="author"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
                 Author (optional)
               </label>
               <input
@@ -227,7 +373,14 @@ const CreateJob = () => {
                 value={form.author}
                 onChange={handleChange}
                 placeholder="Your name"
-                className="w-full border-gray-300 rounded-lg shadow-sm focus:ring-green-500 focus:border-green-500"
+                className="
+                  w-full border border-gray-300 rounded-lg 
+                  px-4 py-2 text-gray-900 
+                  shadow-sm 
+                  focus:outline-none 
+                  focus:ring-2 focus:ring-green-600 focus:border-green-600
+                  transition
+                "
               />
             </div>
 
@@ -243,7 +396,7 @@ const CreateJob = () => {
               <button
                 type="submit"
                 disabled={submitting}
-                className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50 flex items-center space-x-2 transition"
+                className="px-6 py-2 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-lg hover:from-green-700 hover:to-green-800 disabled:opacity-50 flex items-center space-x-2 transition"
               >
                 {submitting && (
                   <svg
@@ -252,7 +405,13 @@ const CreateJob = () => {
                     stroke="currentColor"
                     viewBox="0 0 24 24"
                   >
-                    <circle cx="12" cy="12" r="10" strokeWidth="4" className="opacity-25" />
+                    <circle
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      strokeWidth="4"
+                      className="opacity-25"
+                    />
                     <path
                       fill="currentColor"
                       d="M4 12a8 8 0 018-8v4l3-3-3-3v4a8 8 0 10-8 8z"
@@ -265,7 +424,7 @@ const CreateJob = () => {
             </div>
           </form>
         </div>
-      </div>
+      </main>
     </div>
   );
 };

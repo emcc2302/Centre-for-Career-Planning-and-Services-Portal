@@ -27,5 +27,15 @@ export const updateApplicationStatus = async (id, status) => {
     headers: {
       Authorization: `Bearer ${token}`,
     },
-  });
+  });``
 };
+
+export const saveJob = async (jobId) => {
+  const res = await api.post("/api/applications/save", { jobId });
+  return res.data;
+};
+
+export const fetchSavedApplications = () =>
+  api
+    .get("/api/applications/saved")
+    .then((res) => res.data.savedApplications);

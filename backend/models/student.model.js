@@ -61,7 +61,6 @@ const studentSchema = new mongoose.Schema({
     ref: 'JobPosting'
   }],
 
-  // ✅ New Fields
   resumeLink: {
     type: String,
     default: ""
@@ -69,7 +68,7 @@ const studentSchema = new mongoose.Schema({
 
   profilePhotoURL: {
     type: String,
-    default: "" // Store the image URL here
+    default: "" 
   }
 
 }, { timestamps: true });
