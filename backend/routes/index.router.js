@@ -12,6 +12,7 @@ import referalRouter from "./referral.routes.js";
 import resumeRouter from "./resume.routes.js";
 import applicationRoutes from "./application.routes.js";
 import profileRouter from "./profile.routes.js";
+import savedJobsRouter from "./savedJobs.route.js";
 
 const router = express.Router();
 
@@ -26,6 +27,7 @@ router.use("/stats", statsRouter);
 router.use("/referrals", referalRouter);
 router.use("/resume", resumeRouter);
 router.use("/applications", applicationRoutes);
+router.use("/saved-jobs", savedJobsRouter);
 router.use("/profile", profileRouter);
 
 export default router;

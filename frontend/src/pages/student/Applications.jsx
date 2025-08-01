@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { fetchJobs, fetchMyApplications } from "../../api/useApply";
 import Sidebar from "../../components/Sidebar";
 import ApplyModal from "../../components/ApplyModel";
-import { saveJob } from "../../api/useApply";
+import { saveJob } from "../../api/useSavedJobs";
 
 const Applications = () => {
   const [jobs, setJobs] = useState([]);

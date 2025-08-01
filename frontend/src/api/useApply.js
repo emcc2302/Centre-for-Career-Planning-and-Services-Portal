@@ -1,8 +1,6 @@
-// src/api/useApply.js
 import axios from "axios";
 
 const BASE_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:3000";
-console.log("API baseURL is:", BASE_URL);
 
 const api = axios.create({
   baseURL: BASE_URL,
@@ -27,13 +25,3 @@ export const fetchMyApplications = () =>
 
 export const applyToJob = (data) =>
   api.post("/api/applications/apply", data).then((res) => res.data);
-
-export const saveJob = async (jobId) => {
-  const res = await api.post("/api/applications/save", { jobId });
-  return res.data;
-};
-
-export const fetchSavedApplications = () =>
-  api
-    .get("/api/applications/saved")
-    .then((res) => res.data.savedApplications);

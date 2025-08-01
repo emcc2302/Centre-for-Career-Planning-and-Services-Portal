@@ -1,7 +1,5 @@
 import JobApplication from "../models/JobApplication.model.js";
 import JobPosting from "../models/jobPosting.model.js";
-import Student from "../models/student.model.js";
-import User from "../models/user.model.js";
 
 export const getStudentApplications = async (req, res) => {
   try {
@@ -134,41 +132,5 @@ export const getJobApplications = async (req, res) => {
       message: "Failed to fetch applicants",
       error: err.message
     });
-  }
-};
-
-export const saveJob = async (req, res) => {
-  try {
-    const { jobId } = req.body;
-    const studentId = req.userId;
-
-    const student = await Student.findById(studentId);
-    if (!student) {
-      return res.status(404).json({ message: "Student not found" });
-    }
-
-    if (!student.savedJobs.includes(jobId)) {
-      student.savedJobs.push(jobId);
-      await student.save();
-    }
-
-    res.status(200).json({ message: "Job saved." });
-  } catch (err) {
-    console.error("Save job error:", err);
-    res.status(500).json({ message: "Failed to save job." });
-  }
-};
-
-export const savedJobs = async (req, res) => {
-  try {
-    const student = await Student.findById(req.userId).populate("savedJobs");
-    if (!student) {
-      return res.status(404).json({ message: "Student not found" });
-    }
-
-    res.status(200).json({ savedApplications: student.SavedJobs });
-  } catch (err) {
-    console.error("Get saved jobs error:", err);
-    res.status(500).json({ message: "Failed to fetch saved jobs." });
   }
 };
