@@ -23,17 +23,8 @@ const Sidebar = () => {
       <NavLink to="/" className={navLinkClass}>
         Home
       </NavLink>
-      <NavLink to="/applications" className={navLinkClass}>
-        Applications
-      </NavLink>
-      <NavLink to="/saved-applications" className={navLinkClass}>
-        Saved Apps
-      </NavLink>
       <NavLink to="/analytics" className={navLinkClass}>
         Analytics
-      </NavLink>
-      <NavLink to="/referrals" className={navLinkClass}>
-        Referrals
       </NavLink>
       <NavLink to="/alumni" className={navLinkClass}>
         Alumni
@@ -43,6 +34,15 @@ const Sidebar = () => {
         <>
           <NavLink to="/profile" className={navLinkClass}>
             Profile
+          </NavLink>
+          <NavLink to="/applications" className={navLinkClass}>
+            Applications
+          </NavLink>
+          <NavLink to="/saved-applications" className={navLinkClass}>
+            Saved Apps
+          </NavLink>
+          <NavLink to="/referrals" className={navLinkClass}>
+            Referrals
           </NavLink>
           <NavLink to="/resumebuilder" className={navLinkClass}>
             Resume Builder
@@ -54,9 +54,14 @@ const Sidebar = () => {
       )}
 
       {authUser.role === "admin" && (
-        <NavLink to="/admin/create-job" className={navLinkClass}>
-          Create Job
-        </NavLink>
+        <>
+          <NavLink to="/admin/create-job" className={navLinkClass}>
+            Create Job
+          </NavLink>
+          <NavLink to="/admin/add-alumni" className={navLinkClass}>
+            Add Alumni
+          </NavLink>
+        </>
       )}
     </>
   );
@@ -66,8 +71,8 @@ const Sidebar = () => {
       {/* MOBILE/TABLET TOP BAR */}
       <div className="md:hidden fixed top-0 left-0 right-0 h-16 bg-[#0fa18e] text-white px-4 flex items-center justify-between z-20 shadow-md">
         <NavLink to="/" className="flex items-center">
-          <img src="/images/CCPS.png" alt="Logo" />
-          <span className="ml-3 text-xl font-semibold font-montserrat">CCPS</span>
+          <img src="/images/CCPS.png" alt="Logo" className="h-8 w-8 sm:h-10 sm:w-10" />
+          <span className="ml-2 text-lg sm:text-xl font-semibold font-montserrat">CCPS</span>
         </NavLink>
         <button
           onClick={() => setIsOpen((v) => !v)}
@@ -87,11 +92,11 @@ const Sidebar = () => {
 
       {/* MOBILE/TABLET DRAWER */}
       <div
-        className={`md:hidden fixed top-16 left-0 w-64 bg-[#0fa18e] h-[calc(100vh-4rem)] transition-transform duration-300 z-30 ${
+        className={`md:hidden fixed top-16 left-0 w-64 bg-[#0fa18e] h-[calc(100vh-4rem)] max-h-[calc(100vh-4rem)] transition-transform duration-300 z-30 ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
-        <div className="h-full flex flex-col justify-between">
+        <div className="h-full flex flex-col justify-between overflow-hidden">
           <div
             className="overflow-y-auto flex-1 space-y-1 py-4"
             onClick={() => setIsOpen(false)}

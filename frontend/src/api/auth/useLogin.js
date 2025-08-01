@@ -12,7 +12,6 @@ import { useAppContext } from '../../context/AppContext.jsx';
         if(!success) return;
         setLoading(true)
         try{
-            console.log(backendUrl)
             const res = await fetch(`${backendUrl}/api/auth/login`,{
                 method: "POST",
                 headers: {
