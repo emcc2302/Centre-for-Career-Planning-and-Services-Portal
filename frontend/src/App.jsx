@@ -17,6 +17,7 @@ import ResetPasswordPage from './pages/auth/ResetPasswordPage';
 import Alumni from './pages/student/Alumni';
 import Profile from './pages/student/Profile';
 import Applications from './pages/student/Applications';
+import SavedApplications from './pages/student/Savedapplications';
 import ResumeBuilder from './pages/student/ResumeBuilder';
 import DiscussionForum from './pages/student/DiscussionForum';
 import AnalyticsDashboard from './pages/student/AnalyticsDashboard';
@@ -28,7 +29,7 @@ import Dashboard from './pages/Dashboard';
 import AddThread from './components/DiscussionForum/AddThread';
 
 // Admin Pages Imports
-import AddAlumni from './pages/admin/Alumni';
+import AddAlumni from './pages/admin/AddAlumni';
 import CreateJob from './pages/admin/CreateJob';
 import AdminJobList from './pages/admin/AdminJobList';
 import JobApplicants from './pages/admin/JobApplications';
@@ -74,16 +75,24 @@ function App() {
               : <Navigate to="/login" replace />
           }
         />
-        <Route path="*" element={<Navigate to="/" replace />} />
+        <Route
+          path="/saved-applications"
+          element={
+            authUser
+              ? <SavedApplications />
+              : <Navigate to="/login" replace />
+          }
+        />
         <Route
           path="/admin/create-job"
           element={authUser?.role === "admin" ? <CreateJob /> : <Navigate to="/" />}
         />
         {/* ALUMNI PAGES */}
         <Route
-          path="/add-alumni"
+          path="/admin/add-alumni"
           element={authUser?.role ==='admin'? <AddAlumni/> : <Navigate to ='/'/>}
         />
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
       
       <Toaster />

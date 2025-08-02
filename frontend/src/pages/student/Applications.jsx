@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { fetchJobs, fetchMyApplications } from "../../api/useApply";
 import Sidebar from "../../components/Sidebar";
 import ApplyModal from "../../components/ApplyModel";
+import { saveJob } from "../../api/useApply";
 
 const Applications = () => {
   const [jobs, setJobs] = useState([]);
@@ -46,14 +47,27 @@ const Applications = () => {
     }
   };
 
+  const handleSaveJob = async (jobId) => {
+    try {
+      const token = localStorage.getItem("ccps-token");
+      await saveJob(jobId, token);
+      toast.success("Job saved!");
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to save job.");
+    }
+  };
+
+
   const filteredJobs = jobs.filter((job) =>
     job.jobTitle.toLowerCase().includes(search.toLowerCase())
   );
 
   const grouped = {
-    onCampus: filteredJobs.filter((job) => job.Type === "On-Campus"),
-    offCampus: filteredJobs.filter((job) => job.Type === "Off-Campus"),
+    onCampus: filteredJobs.filter((job) => job.Type === "on-campus"),
+    offCampus: filteredJobs.filter((job) => job.Type === "off-campus"),
   };
+
 
   const renderJobs = (jobsList) =>
     jobsList.length === 0 ? (
@@ -109,6 +123,7 @@ const Applications = () => {
                     <div className="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></div>
                     <span className="text-xs text-green-600 font-medium">Applied</span>
                   </div>
+                  
                 )}
               </div>
               <h2 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-[#0c4a42] transition-colors duration-200 relative z-10 line-clamp-2">
@@ -162,20 +177,31 @@ const Applications = () => {
                       {status}
                     </span>
                   ) : (
-                    <button
-                      onClick={() => openApplyModal(job)}
-                      className="inline-flex items-center px-4 py-2.5 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white text-sm font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 group/btn"
-                    >
-                      <svg
-                        className="w-4 h-4 mr-2 group-hover/btn:rotate-12 transition-transform duration-200"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => openApplyModal(job)}
+                        className="inline-flex items-center px-4 py-2.5 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white text-sm font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 group/btn"
                       >
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                      </svg>
-                      Apply Now
-                    </button>
+                        <svg
+                          className="w-4 h-4 mr-2 group-hover/btn:rotate-12 transition-transform duration-200"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                        </svg>
+                        Apply Now
+                      </button>
+                      <button
+                        onClick={() => handleSaveJob(job._id)}
+                        className="inline-flex items-center px-4 py-2.5 bg-yellow-500 hover:bg-yellow-600 text-white text-sm font-semibold rounded-xl shadow-lg transition-all duration-200"
+                      >
+                        <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                        </svg>
+                        Save
+                      </button>
+                    </div>
                   )}
                 </div>
                 <div className="text-right">
