@@ -106,7 +106,7 @@ function Referrals() {
     <div className="flex min-h-screen bg-[#f9fafb]">
       <Sidebar />
       <main className="flex-1 flex flex-col px-2 md:px-8 py-6">
-        <h1 className="text-3xl font-bold text-[#0c4a42] mb-8">Referral Request</h1>
+        <h1 className="text-3xl font-bold text-[#0c4a42] mb-8 mt-14 md:mt-0">Referral Request</h1>
         <div className="flex-1 flex flex-col lg:flex-row gap-8">
 
           {/* Active Requests */}

@@ -19,7 +19,7 @@ const DiscussionForum = () => {
       <main className="flex-1 px-2 sm:px-4 md:px-8 py-4 flex flex-col">
         <div className="flex flex-col flex-1 h-full">
           <div className="flex flex-wrap justify-between items-center gap-4 mb-6">
-            <h1 className="text-3xl font-bold text-[#0c4a42]">Discussion Forum</h1>
+            <h1 className="text-3xl font-bold text-[#0c4a42] mt-14 md:mt-0">Discussion Forum</h1>
             <button
               className="bg-[#036756] hover:bg-[#025d4a] text-white font-medium px-6 py-2 rounded-lg shadow-md transition"
               onClick={() => setShowAddThread(true)}
