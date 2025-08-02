@@ -1,6 +1,11 @@
 import mongoose from "mongoose";
 
 const studentSchema = new mongoose.Schema({ 
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true
+  },
   ReferenceObject: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User'
@@ -58,7 +63,8 @@ const studentSchema = new mongoose.Schema({
 
   SavedJobs: [{
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'JobPosting'
+    ref: 'JobPosting',
+    default: []
   }],
 
   resumeLink: {
