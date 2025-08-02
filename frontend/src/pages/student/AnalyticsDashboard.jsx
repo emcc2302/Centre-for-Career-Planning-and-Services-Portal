@@ -76,7 +76,7 @@ const AnalyticsDashboard = () => {
   }));
 
   return (
-    <div className="md:pl-14 md:pr-14 flex min-h-screen bg-slate-100">
+    <div className="md:pl-14 md:pr-14 flex min-h-screen bg-slate-50">
       <Sidebar />
 
       <div className="flex-1 flex flex-col">

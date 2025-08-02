@@ -71,8 +71,15 @@ const Sidebar = () => {
       {/* MOBILE/TABLET TOP BAR */}
       <div className="md:hidden fixed top-0 left-0 right-0 h-16 bg-[#0fa18e] text-white px-4 flex items-center justify-between z-20 shadow-md">
         <NavLink to="/" className="flex items-center">
-          <img src="/images/CCPS.png" alt="Logo" className="h-8 w-8 sm:h-10 sm:w-10" />
-          <span className="ml-2 text-lg sm:text-xl font-semibold font-montserrat">CCPS</span>
+          <img src="/images/CCPS.png" alt="Logo" className="h-10 w-10" />
+          <span className="ml-2 flex flex-col justify-center">
+            <span className="text-lg font-semibold font-montserrat text-white leading-none">
+              CCPS
+            </span>
+            <span className="text-[10px] font-bold text-white leading-none mt-0.5">
+              ({authUser.role})
+            </span>
+          </span>
         </NavLink>
         <button
           onClick={() => setIsOpen((v) => !v)}
@@ -81,6 +88,7 @@ const Sidebar = () => {
           {isOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
       </div>
+
 
       {/* MOBILE/TABLET OVERLAY */}
       {isOpen && (
@@ -114,10 +122,16 @@ const Sidebar = () => {
         <div>
           <NavLink to="/" className="flex items-center px-6 mb-8">
             <img src="/images/CCPS.png" alt="Logo" className="h-10 w-10" />
-            <span className="ml-3 text-2xl font-semibold font-montserrat text-white">
-              CCPS
+            <span className="ml-3 flex flex-col">
+              <span className="text-2xl font-semibold font-montserrat text-white">
+                CCPS
+              </span>
+              <span className="text-xs font-bold text-white">
+                ({authUser.role})
+              </span>
             </span>
           </NavLink>
+
           <nav className="flex flex-col space-y-1 overflow-y-auto">
             {navItems}
           </nav>

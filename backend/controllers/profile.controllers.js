@@ -15,42 +15,43 @@ export const createStudentProfile = async (req, res) => {
       resumeUrl
     } = req.body;
 
-    //  Validate required fields
+    // Validate required fields
     if (!studentID || !discipline || !batch || !status) {
       return res.status(400).json({
         message: "Missing required fields: studentID, discipline, batch, status"
       });
     }
 
-    //  Check if user exists
+    // Check if user exists
     const user = await User.findById(userId);
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
 
-    //  Check if student profile already exists
-    const existing = await Student.findOne({ ReferenceObject: userId });
+    // Check if student profile already exists
+    const existing = await Student.findOne({ user: userId }); // Changed to user
     if (existing) {
       return res.status(400).json({ message: "Student profile already exists" });
     }
 
-    //  Check if StudentID is already taken (due to `unique: true`)
+    // Check if StudentID is already taken (due to unique constraint)
     const takenID = await Student.findOne({ StudentID: studentID });
     if (takenID) {
       return res.status(400).json({ message: "Student ID already in use" });
     }
 
-    //  Create student document
+    // Create student document with required 'user' field set
     const newStudent = new Student({
-      ReferenceObject: userId,
+      user: userId,              // Required field!
+      ReferenceObject: userId,   // Optional to keep
       StudentID: studentID,
       Discipline: discipline,
       Program: program || "",
       CGPA: cgpa || null,
       Batch: batch,
       Status: status,
-      profilePhotoURL:imageUrl,
-      resumeLink:resumeUrl,
+      profilePhotoURL: imageUrl,
+      resumeLink: resumeUrl,
       Jobstatus: [],
       JobReferenceID: null,
       SavedJobs: []
@@ -67,8 +68,6 @@ export const createStudentProfile = async (req, res) => {
     return res.status(500).json({ message: "Server error" });
   }
 };
-
-
 
 export const getStudentProfile = async (req, res) => {
   try {

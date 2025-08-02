@@ -12,13 +12,13 @@ function Referrals() {
   const { requestReferral } = useRequestReferral();
   const { deleteReferral } = useDeleteReferral();
   const { provideReferral, isSubmitting: isProvidingReferral } = useProvideReferral();
-  
+
   const [referralList, setReferralList] = useState([]);
   const [companyName, setCompanyName] = useState("");
   const [jobId, setJobId] = useState("");
   const [resumeLink, setResumeLink] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  
+
   const [activeReferralId, setActiveReferralId] = useState(null);
   const [referralLinkInput, setReferralLinkInput] = useState("");
 
@@ -32,15 +32,10 @@ function Referrals() {
       alert("Please fill all fields");
       return;
     }
-
     setIsSubmitting(true);
     try {
-      await requestReferral({
-        companyName,
-        jobId,
-        resumeLink
-      });
-      
+      await requestReferral({ companyName, jobId, resumeLink });
+      // Ideally, you will refetch referrals, here we update local state for responsiveness
       const newReferral = {
         _id: Date.now().toString(),
         studentName: authUser.name,
@@ -48,20 +43,14 @@ function Referrals() {
         companyName,
         jobId,
         resumeLink,
-        createdAt: new Date().toISOString()
+        createdAt: new Date().toISOString(),
       };
-      
       setReferralList([newReferral, ...referralList]);
-      
-      setCompanyName("");
-      setJobId("");
-      setResumeLink("");
+      setCompanyName(""); setJobId(""); setResumeLink("");
     } catch (error) {
-      console.error(error);
       alert("Failed to submit referral request");
-    } finally {
-      setIsSubmitting(false);
     }
+    setIsSubmitting(false);
   };
 
   const handleDeleteReferral = async (referralId) => {
@@ -70,7 +59,6 @@ function Referrals() {
         await deleteReferral(referralId);
         setReferralList(referralList.filter(ref => ref._id !== referralId));
       } catch (error) {
-        console.error(error);
         alert("Failed to delete referral request");
       }
     }
@@ -78,11 +66,9 @@ function Referrals() {
 
   const handleToggleProvideReferral = (referralId) => {
     if (activeReferralId === referralId) {
-      setActiveReferralId(null);
-      setReferralLinkInput("");
+      setActiveReferralId(null); setReferralLinkInput("");
     } else {
-      setActiveReferralId(referralId);
-      setReferralLinkInput("");
+      setActiveReferralId(referralId); setReferralLinkInput("");
     }
   };
 
@@ -91,27 +77,22 @@ function Referrals() {
       alert("Please enter a referral link");
       return;
     }
-    
     try {
-      const updatedReferral = await provideReferral(referralId, referralLinkInput);
-
-      setReferralList(referralList.map(ref => 
-        ref._id === referralId 
+      await provideReferral(referralId, referralLinkInput);
+      setReferralList(referralList.map(ref =>
+        ref._id === referralId
           ? { ...ref, referralLink: referralLinkInput, alumniEmail: authUser.email }
           : ref
       ));
-      
-      setActiveReferralId(null);
-      setReferralLinkInput("");
-      
+      setActiveReferralId(null); setReferralLinkInput("");
       alert("Referral link provided successfully");
     } catch (error) {
-      console.error(error);
       alert("Failed to provide referral link");
     }
   };
 
   const formatDate = (dateString) => {
+    if (!dateString) return "";
     const options = { year: 'numeric', month: 'short', day: 'numeric' };
     return new Date(dateString).toLocaleDateString(undefined, options);
   };
@@ -122,165 +103,153 @@ function Referrals() {
   };
 
   return (
-    <div className="flex h-screen bg-slate-100">
+    <div className="flex min-h-screen bg-[#f9fafb]">
       <Sidebar />
-      <div className="flex-1 p-12 overflow-auto">
-        <h1 className="text-3xl font-bold text-[#0c4a42] mb-5 mt-8 md:mt-0" >Referral Request</h1>
-        
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-2 bg-white rounded-lg shadow-md p-4 overflow-auto max-h-[calc(100vh-150px)]">
-            <h2 className="text-xl font-semibold mb-4 text-gray-700 border-b pb-2">Active Requests</h2>
-            
+      <main className="flex-1 flex flex-col px-2 md:px-8 py-6">
+        <h1 className="text-3xl font-bold text-[#0c4a42] mb-8 mt-14 md:mt-0">Referral Request</h1>
+        <div className="flex-1 flex flex-col lg:flex-row gap-8">
+
+          {/* Active Requests */}
+          <section className="flex-1 bg-white rounded-2xl shadow-md p-6 flex flex-col max-h-[85vh] overflow-y-auto">
+            <h2 className="text-xl font-semibold text-gray-700 border-b pb-2 mb-5">Active Requests</h2>
             {referralList && referralList.length > 0 ? (
-              <div className="space-y-3">
+              <div className="flex flex-col gap-4">
                 {referralList.map((ref) => (
-                  <div key={ref._id} className="border border-gray-200 rounded-md p-4 bg-white hover:bg-gray-50 transition">
-                    <div className="flex justify-between items-start">
-                      <div>
-                        <h3 className="font-semibold text-lg">{ref.companyName}</h3>
-                        <p className="text-gray-600">Job ID: {ref.jobId}</p>
-                        <p className="text-gray-600 text-sm">Requested by: {ref.studentName}</p>
-                        {ref.createdAt && (
-                          <p className="text-gray-500 text-xs mt-1">Posted on: {formatDate(ref.createdAt)}</p>
-                        )}
-                        
-                        {ref.referralLink && authUser.email === ref.studentEmail && (
-                          <div className="mt-2 text-green-600">
-                              Referral : {ref.referralLink}
-                            <p className="text-gray-500 text-xs">
-                              Provided by: {ref.alumniEmail}
-                            </p>
-                          </div>
-                        )}
-                      </div>
-                      
-                      <div className="flex flex-col space-y-2">
-                        {authUser.role === "alumni" && !ref.referralLink && (
-                          <button 
-                            onClick={() => handleToggleProvideReferral(ref._id)}
-                            className="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-md text-sm transition"
+                  <div key={ref._id} className="border border-gray-200 rounded-xl p-4 bg-white hover:shadow-sm transition relative flex flex-col md:flex-row justify-between items-start md:items-center">
+                    <div className="flex-1">
+                      <h3 className="font-semibold text-lg mb-1 text-[#036756]">{ref.companyName}</h3>
+                      <p className="text-gray-700 text-base">Job ID: <span className="font-semibold">{ref.jobId}</span></p>
+                      <p className="text-gray-500 text-sm mt-1">Requested by: {ref.studentName}</p>
+                      {ref.createdAt && (
+                        <p className="text-gray-400 text-xs">Posted on: {formatDate(ref.createdAt)}</p>
+                      )}
+                      {ref.referralLink && authUser.email === ref.studentEmail && (
+                        <div className="mt-2 rounded bg-emerald-50 px-2 py-1">
+                          <span className="text-emerald-700 font-semibold">Referral:</span>{" "}
+                          <a
+                            href={formatUrl(ref.referralLink)}
+                            className="text-blue-600 underline break-all"
+                            target="_blank" rel="noopener noreferrer"
+                          >{ref.referralLink}</a>
+                          <p className="text-gray-400 text-xs">Provided by: {ref.alumniEmail}</p>
+                        </div>
+                      )}
+                      {ref.resumeLink && (
+                        <div className="mt-2">
+                          <a
+                            href={formatUrl(ref.resumeLink)}
+                            target="_blank" rel="noopener noreferrer"
+                            className="text-blue-500 hover:text-blue-700 text-sm underline"
+                          >View Resume</a>
+                        </div>
+                      )}
+
+                      {/* Provide Referral Input */}
+                      {activeReferralId === ref._id && (
+                        <div className="mt-3 flex items-center gap-2">
+                          <input
+                            type="text"
+                            value={referralLinkInput}
+                            onChange={(e) => setReferralLinkInput(e.target.value)}
+                            placeholder="Enter referral link"
+                            className="flex-1 px-3 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-[1.5px] focus:ring-emerald-500 text-sm"
+                          />
+                          <button
+                            onClick={() => handleProvideReferral(ref._id)}
+                            disabled={isProvidingReferral}
+                            className={`bg-emerald-500 hover:bg-emerald-600 text-white font-medium px-4 py-1 rounded-md text-sm transition ${isProvidingReferral ? 'opacity-70 cursor-not-allowed' : ''}`}
                           >
-                            {activeReferralId === ref._id ? 'Cancel' : 'Provide Referral'}
+                            {isProvidingReferral ? 'Sending...' : 'Send'}
                           </button>
-                        )}
-                        
-                        {(authUser.email === ref.studentEmail)  && (
-                          <button 
-                            onClick={() => handleDeleteReferral(ref._id)}
-                            className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-md text-sm transition"
-                          >
-                            Delete
-                          </button>
-                        )}
-                      </div>
+                        </div>
+                      )}
                     </div>
-                    
-                    {activeReferralId === ref._id && (
-                      <div className="mt-3 flex items-center space-x-2">
-                        <input 
-                          type="text" 
-                          value={referralLinkInput}
-                          onChange={(e) => setReferralLinkInput(e.target.value)}
-                          placeholder="Enter referral link"
-                          className="flex-grow px-3 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        />
-                        <button 
-                          onClick={() => handleProvideReferral(ref._id)}
-                          disabled={isProvidingReferral}
-                          className={`bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-md text-sm transition ${
-                            isProvidingReferral ? 'opacity-70 cursor-not-allowed' : ''
-                          }`}
+
+                    {/* Action Buttons */}
+                    <div className="md:self-start flex flex-row gap-2 mt-4 md:mt-0 md:flex-col ml-0 md:ml-4">
+                      {authUser.role === "alumni" && !ref.referralLink && (
+                        <button
+                          onClick={() => handleToggleProvideReferral(ref._id)}
+                          className="bg-emerald-100 hover:bg-emerald-200 text-emerald-700 font-semibold px-3 py-1 rounded-lg text-sm"
                         >
-                          {isProvidingReferral ? 'Sending...' : 'Send'}
+                          {activeReferralId === ref._id ? 'Cancel' : 'Provide Referral'}
                         </button>
-                      </div>
-                    )}
-                    
-                    {ref.resumeLink && (
-                      <div className="mt-2">
-                        <a 
-                          href={formatUrl(ref.resumeLink)}
-                          target="_blank" 
-                          rel="noopener noreferrer"
-                          className="text-blue-500 hover:text-blue-700 text-sm underline"
-                        >
-                          View Resume
-                        </a>
-                      </div>
-                    )}
+                      )}
+                      {authUser.email === ref.studentEmail && (
+                        <button
+                          onClick={() => handleDeleteReferral(ref._id)}
+                          className="bg-red-100 hover:bg-red-200 text-red-700 font-semibold px-3 py-1 rounded-lg text-sm"
+                        >Delete</button>
+                      )}
+                    </div>
+
                   </div>
                 ))}
               </div>
             ) : (
-              <div className="text-center py-8 text-gray-500">
+              <div className="flex flex-col items-center justify-center flex-1 py-16 text-gray-400">
                 No referral requests found
               </div>
             )}
-          </div>
-          
-          <div className="bg-white rounded-lg shadow-md p-4">
-            <h2 className="text-xl font-semibold mb-4 text-gray-700 border-b pb-2">
+          </section>
+
+          {/* Request a Referral / Info */}
+          <aside className="w-full lg:w-[350px] bg-white rounded-2xl shadow-md p-6">
+            <h2 className="text-xl font-semibold mb-5 border-b text-gray-700 pb-2">
               {authUser.role === "student" ? "Request a Referral" : "Referral Information"}
             </h2>
-            
             {authUser.role === "student" ? (
-              <form onSubmit={handleRequestReferral} className="space-y-4">
-                <div className="space-y-2">
-                  <label className="block text-sm font-medium text-gray-700">Company Name</label>
-                  <input 
-                    type="text" 
+              <form onSubmit={handleRequestReferral} className="space-y-5">
+                <div>
+                  <label className="block mb-1 text-sm font-medium text-gray-700">Company Name</label>
+                  <input
+                    type="text"
                     value={companyName}
-                    onChange={(e) => setCompanyName(e.target.value)} 
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-                    placeholder="e.g. Google, Amazon" 
+                    onChange={(e) => setCompanyName(e.target.value)}
+                    placeholder="e.g. Google, Amazon"
+                    className="w-full px-3 py-2 border border-gray-200 bg-[#f9fafb] rounded-md text-base focus:outline-none focus:ring-[1.5px] focus:ring-emerald-500"
                     required
                   />
                 </div>
-                
-                <div className="space-y-2">
-                  <label className="block text-sm font-medium text-gray-700">Job ID / Position</label>
-                  <input 
-                    type="text" 
+                <div>
+                  <label className="block mb-1 text-sm font-medium text-gray-700">Job ID / Position</label>
+                  <input
+                    type="text"
                     value={jobId}
-                    onChange={(e) => setJobId(e.target.value)} 
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-                    placeholder="e.g. SWE-123456 or Software Engineer" 
+                    onChange={(e) => setJobId(e.target.value)}
+                    placeholder="e.g. SWE-123456 or Software Engineer"
+                    className="w-full px-3 py-2 border border-gray-200 bg-[#f9fafb] rounded-md text-base focus:outline-none focus:ring-[1.5px] focus:ring-emerald-500"
                     required
                   />
                 </div>
-                
-                <div className="space-y-2">
-                  <label className="block text-sm font-medium text-gray-700">Resume Link</label>
-                  <input 
-                    // type="url" 
-                    type='text'
+                <div>
+                  <label className="block mb-1 text-sm font-medium text-gray-700">Resume Link</label>
+                  <input
+                    type="text"
                     value={resumeLink}
-                    onChange={(e) => setResumeLink(e.target.value)} 
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-                    placeholder="https://drive.google.com/..." 
+                    onChange={(e) => setResumeLink(e.target.value)}
+                    placeholder="https://drive.google.com/..."
+                    className="w-full px-3 py-2 border border-gray-200 bg-[#f9fafb] rounded-md text-base focus:outline-none focus:ring-[1.5px] focus:ring-emerald-500"
                     required
                   />
-                  <p className="text-xs text-gray-500">Provide a public link to your resume</p>
+                  <p className="text-xs text-gray-400 mt-1">Provide a public link to your resume</p>
                 </div>
-                
-                <button 
-                  type="submit" 
+                <button
+                  type="submit"
                   disabled={isSubmitting}
-                  className={`w-full py-2 px-4 rounded-md text-white font-medium ${
-                    isSubmitting ? 'bg-blue-400 cursor-not-allowed' : 'bg-emerald-500 hover:bg-emerald-700'
-                  } transition duration-200`}
+                  className={`w-full py-2 px-4 rounded-lg text-white text-base font-semibold ${isSubmitting ? 'bg-emerald-300 cursor-not-allowed' : 'bg-emerald-500 hover:bg-emerald-700'} transition duration-200`}
                 >
                   {isSubmitting ? 'Submitting...' : 'Request Referral'}
                 </button>
               </form>
             ) : (
-              <div className="text-center py-8 text-gray-500">
+              <div className="flex flex-col items-center text-gray-400 py-10">
                 Only students can request referrals
               </div>
             )}
-          </div>
+          </aside>
         </div>
-      </div>
+      </main>
     </div>
   );
 }
