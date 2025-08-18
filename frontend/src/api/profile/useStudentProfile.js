@@ -1,3 +1,5 @@
+console.log("VITE_BACKEND_URL is:", import.meta.env.VITE_BACKEND_URL);
+
 const BASE_URL = import.meta.env.VITE_BACKEND_URL+"/api/profile" || "http://localhost:3000/api/profile";
 
   export const createStudentProfile = async (userId, data) => {
