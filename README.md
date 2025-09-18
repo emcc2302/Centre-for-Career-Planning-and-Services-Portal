@@ -11,12 +11,9 @@ A robust Job Portal Application that streamlines job searching, application mana
     <img src="https://img.shields.io/badge/License-MIT-yellow" alt="License: MIT" />
 </p>
 <p align="center"> 
-    <img src="https://img.shields.io/github/issues-pr-closed/OpenLake/Centre-for-Career-Planning-and-Services-Portal
-?color=success" alt="Pull Requests Merged" />
-    <img src="https://img.shields.io/github/issues/OpenLake/Centre-for-Career-Planning-and-Services-Portal
-?color=orange" alt="Open Issues" />
-    <img src="https://img.shields.io/github/contributors/OpenLake/Centre-for-Career-Planning-and-Services-Portal
-" alt="Contributors" />
+    <img src="https://img.shields.io/github/issues-pr-closed/OpenLake/Centre-for-Career-Planning-and-Services-Portal?color=success" alt="Pull Requests Merged" />
+    <img src="https://img.shields.io/github/issues/OpenLake/Centre-for-Career-Planning-and-Services-Portal?color=orange" alt="Open Issues" />
+    <img src="https://img.shields.io/github/contributors/OpenLake/Centre-for-Career-Planning-and-Services-Portal" alt="Contributors" />
 </p>
 
 ---
