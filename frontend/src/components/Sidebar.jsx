@@ -58,6 +58,9 @@ const Sidebar = () => {
           <NavLink to="/admin/create-job" className={navLinkClass}>
             Create Job
           </NavLink>
+           <NavLink to="/admin/manage-jobs" className={navLinkClass}
+            >Manage Job
+            </NavLink>
           <NavLink to="/admin/add-alumni" className={navLinkClass}>
             Add Alumni
           </NavLink>

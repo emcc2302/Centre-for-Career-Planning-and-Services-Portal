@@ -7,36 +7,49 @@ config();
 export const protectRoute = async (req, res, next) => {
     try {
         const token = req.headers.authorization?.split(" ")[1];
+        
         if (!token) {
-            return res.json({ success: false, message: 'Not Authorized. Login Again.' });
+            // Use 401 for Unauthorized
+            return res.status(401).json({ message: 'Authentication token missing.' });
         }
 
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
-        if (!decoded) {
-            return res.status(401).json({ success: false, message: 'Not Authorized. Login Again.' });
-        }
-
+        
+        // Note: The check if (!decoded) is removed because jwt.verify throws on failure.
+        // If it reaches here, the token is structurally valid.
+        
         const user = await User.findById(decoded.userId).select("-password");
 
         if (!user) {
             return res.status(404).json({ message: "User not found" });
         }
+        
         req.userId = user._id;
         req.user = user;
         next();
         
     } catch (error) {
-        console.log("Error in protectRoute middleware: ", error.message);
-        res.status(500).json({ message: "Internal server error" });
+        console.log("Error in protectRoute middleware:", error.message);
+        
+        // 🟢 CRITICAL FIX: Handle JWT-specific errors with 401 status.
+        if (error.name === 'TokenExpiredError') {
+            return res.status(401).json({ message: 'Authentication token expired. Please log in again.' });
+        }
+        if (error.name === 'JsonWebTokenError') {
+            return res.status(401).json({ message: 'Invalid authentication token. Please log in again.' });
+        }
+        
+        // Fallback for other server errors
+        res.status(500).json({ message: "Internal server error during authentication" });
     }
 };
 
 export const authorizeRoles = (...roles) => {
-  return (req, res, next) => {
-    if (!roles.includes(req.user.role)) {
-      return res.status(403).json({ success: false, message: "Access denied" });
-    }
-    next();
-  };
+    // ... (rest of the authorizeRoles function is fine)
+    return (req, res, next) => {
+        if (!req.user || !roles.includes(req.user.role)) { // Added check for safety
+            return res.status(403).json({ success: false, message: "Access denied: Insufficient privileges" });
+        }
+        next();
+    };
 };
